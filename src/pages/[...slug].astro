@@ -24,20 +24,32 @@ export async function getStaticPaths() {
 			},
 		}));
 }
-const { blocks } = Astro.props; 
+
+
 const { getTinaProps } = Astro.props;
+
 const data = await getTinaProps();
+const blocks  = data.data.page.blocks;
+
+
 
 
 
 {blocks && blocks.map((block) => {
-  switch (block.__typename) {
-    case 'PageBlocksCta':
-      return <CTA {...block} />;
-    default:
-      return null;
+  if (!block) return null;
+
+  if (block.__typename === 'PageBlocksCta') {
+    return <CTA 
+      heading={block.heading} 
+      subheading={block.subheading} 
+      buttonText={block.buttonText} 
+    />;
   }
+  
+  return null;
 })}
+
+
 
 
 
