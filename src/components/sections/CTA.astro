@@ -1,11 +1,9 @@
 ---
-// CTA.astro
-const { title, button } = Astro.props;
+// src/components/sections/CTA.astro
+const { heading, subheading, buttonText } = Astro.props;
 ---
-
-<section class="py-20 text-center">
-  <h2 class="text-2xl font-semibold">{title}</h2>
-  <button class="mt-4 px-6 py-2 bg-black text-white rounded">
-    {button}
-  </button>
+<section class="cta-section">
+  <h2>{heading}</h2>
+  <p>{subheading}</p>
+  <button>{buttonText}</button>
 </section>
