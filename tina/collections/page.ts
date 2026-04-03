@@ -2,7 +2,7 @@ export const PageCollection = {
   name: "page",
   label: "Pages",
   path: "src/content/page",
-  format: "md",
+ format: "mdx",
 
   fields: [
     {
