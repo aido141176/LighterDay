@@ -1,22 +1,24 @@
-import { useTina } from "tinacms/dist/react";
 import CTA from "../components/CTA";
-import type { PageQuery } from "../__generated__/types";
 
 export default function Page(props: any) {
-  const { data } = useTina(props) as { data: PageQuery };
-
-  const blocks = data?.page?.blocks || [];
+  const { blocks = [], seoTitle } = props;
 
   console.log("BLOCKS:", blocks);
 
   return (
     <div>
-      {blocks.map((block: any, i: number) => {
-        switch (block._template) {
-          case "cta":
-            return <CTA key={i} {...block} />;
+      <h1>{seoTitle}</h1>
+
+      {blocks.map((block: any, index: number) => {
+        switch (block.__typename) {
+          case "PageBlocksCta":
+            return <CTA key={index} {...block} />;
           default:
-            return null;
+            return (
+              <pre key={index}>
+                {JSON.stringify(block, null, 2)}
+              </pre>
+            );
         }
       })}
     </div>
