@@ -1,9 +1,10 @@
-export const PageCollection = {
+import type { Collection } from "tinacms";
+
+export const PageCollection: Collection = {
   name: "page",
   label: "Pages",
   path: "src/content/page",
- format: "mdx",
-
+  format: "mdx",
   fields: [
     {
       name: "seoTitle",
@@ -21,10 +22,26 @@ export const PageCollection = {
           name: "cta",
           label: "CTA Section",
           fields: [
-            { name: "headline", type: "string", label: "Headline" },
-            { name: "subtext", type: "string", label: "Subtext" },
-            { name: "buttonText", type: "string", label: "Button Text" },
-            { name: "buttonLink", type: "string", label: "Button Link" },
+            {
+              name: "headline",
+              label: "Headline",
+              type: "string",
+            },
+            {
+              name: "subtext",
+              label: "Subtext",
+              type: "string",
+            },
+            {
+              name: "buttonText",
+              label: "Button Text",
+              type: "string",
+            },
+            {
+              name: "buttonLink",
+              label: "Button Link",
+              type: "string",
+            },
           ],
         },
       ],
