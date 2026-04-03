@@ -1,9 +1,12 @@
+import { useTina } from "tinacms/dist/react";
 import CTA from "../components/CTA";
+import type { PageQuery } from "../__generated__/types";
 
 export default function Page(props: any) {
-  const blocks = props?.data?.page?.blocks || [];
+  const { data } = useTina(props) as { data: PageQuery };
 
-  console.log("PAGE DATA:", props);
+  const blocks = data?.page?.blocks || [];
+
   console.log("BLOCKS:", blocks);
 
   return (
