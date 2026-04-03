@@ -15,9 +15,13 @@ const HomePage = (props: Props) => {
     data: props.data,
   });
 
-  const page = data.page;
+  const page = data?.page;
 
-  return <Page {...page} />;
+  if (!page) {
+    return <main>No page data found.</main>;
+  }
+
+  return <Page page={page} />;
 };
 
 export default HomePage;

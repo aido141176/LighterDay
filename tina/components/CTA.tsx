@@ -1,22 +1,25 @@
-type CTAProps = {
-  headline?: string;
-  subtext?: string;
-  buttonText?: string;
-  buttonLink?: string;
+import { tinaField } from "tinacms/dist/react";
+
+type Props = {
+  block: any;
 };
 
-export default function CTA({
-  headline,
-  subtext,
-  buttonText,
-  buttonLink,
-}: CTAProps) {
+export default function CTA({ block }: Props) {
   return (
-    <section style={{ padding: "40px", textAlign: "center" }}>
-      <h2>{headline}</h2>
-      <p>{subtext}</p>
-      <a href={buttonLink}>
-        <button>{buttonText}</button>
+    <section>
+      <h2 data-tina-field={tinaField(block, "headline")}>
+        {block.headline}
+      </h2>
+
+      <p data-tina-field={tinaField(block, "subtext")}>
+        {block.subtext}
+      </p>
+
+      <a
+        href={block.buttonLink}
+        data-tina-field={tinaField(block, "buttonText")}
+      >
+        {block.buttonText}
       </a>
     </section>
   );
