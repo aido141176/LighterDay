@@ -5,8 +5,6 @@ import Page from "../../tina/pages/Page";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import BaseHead from "../components/BaseHead.astro";
-import CTA from '../components/sections/CTA.astro';
-
 import config from '../content/config/config.json';
 
 export async function getStaticPaths() {
@@ -25,34 +23,8 @@ export async function getStaticPaths() {
 		}));
 }
 
-
 const { getTinaProps } = Astro.props;
-
 const data = await getTinaProps();
-const blocks  = data.data.page.blocks;
-
-
-
-
-
-{blocks && blocks.map((block) => {
-  if (!block) return null;
-
-  if (block.__typename === 'PageBlocksCta') {
-    return <CTA 
-      heading={block.heading} 
-      subheading={block.subheading} 
-      buttonText={block.buttonText} 
-    />;
-  }
-  
-  return null;
-})}
-
-
-
-
-
 ---
 
 <!doctype html>
