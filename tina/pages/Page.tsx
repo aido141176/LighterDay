@@ -11,14 +11,7 @@ export default function Page({ page }: Props) {
   const blocks = page?.blocks ?? [];
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-12">
-      <h1
-        className="mb-12 text-5xl font-bold tracking-tight text-slate-900"
-        data-tina-field={tinaField(page, "seoTitle")}
-      >
-        {seoTitle}
-      </h1>
-
+    <main className="">
       <div className="space-y-16">
         {blocks.map((block: any, index: number) => {
           switch (block.__typename) {

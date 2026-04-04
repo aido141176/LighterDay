@@ -6,7 +6,7 @@ type Props = {
 
 export default function CTA({ block }: Props) {
   return (
-    <section className="mx-auto max-w-4xl rounded-2xl bg-slate-100 px-6 py-16 text-center shadow-sm">
+    <section className="mx-auto bg-slate-100 px-6 py-16 text-center shadow-sm">
       <h2
         className="text-4xl font-extrabold tracking-tight text-slate-900 md:text-5xl"
         data-tina-field={tinaField(block, "headline")}
