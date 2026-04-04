@@ -1,0 +1,70 @@
+---
+import "../styles/global.css";
+import BasicNav from "../components/navigation/BasicNav.astro";
+import Footer from "../components/ui/Footer.astro";
+
+import TinaWrapper from "../components/TinaWrapper.jsx";
+
+const {
+  title = "My Site",
+  description = "Default description",
+  image = "/images/og.jpg",
+  url = "https://example.com"
+} = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Primary SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={url} />
+
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" />
+
+
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Your Business Name",
+        "url": url,
+        "description": description
+      })}
+      </script>
+  </head>
+
+  <body class="text-gray-800 bg-white">
+
+    <BasicNav />
+
+ 
+   
+
+     <main>
+  <slot />
+</main>
+
+
+
+    <Footer />
+
+  </body>
+</html>

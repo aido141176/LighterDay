@@ -1,0 +1,172 @@
+---
+type Link = { label: string; href: string; img?: string };
+type Column = { title: string; links: Link[] };
+type MenuItem = { label: string; href?: string; megaMenu?: boolean; content?: Column[] };
+
+const menuItems: MenuItem[] = [
+  {
+    label: 'Platform',
+    megaMenu: true,
+    content: [
+      {
+        title: 'AI CODE CREATION',
+        links: [
+          { label: 'GitHub Copilot', href: '#', img: 'https://github.githubassets.com/images/modules/site/copilot/copilot-icon.svg' },
+          { label: 'GitHub Spark', href: '#', img: 'https://github.githubassets.com/images/modules/site/copilot/copilot-icon.svg' },
+        ],
+      },
+      {
+        title: 'SECURITY',
+        links: [
+          { label: 'Advanced Security', href: '#' },
+          { label: 'Secret protection', href: '#' },
+           { label: 'Secret weapon', href: '#' },
+        ],
+      },
+     {
+        title: 'SECURITY',
+        links: [
+          { label: 'Advanced Security', href: '#' },
+          { label: 'Secret protection', href: '#' },
+           { label: 'Secret weapon', href: '#' },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Solutions',
+    megaMenu: true,
+    content: [
+      {
+        title: 'ENTERPRISE',
+        links: [
+          { label: 'Startups', href: '#' },
+          { label: 'Education', href: '#' },
+        ],
+      },
+    {
+        title: 'ENTERPRISE',
+        links: [
+          { label: 'Startups', href: '#' },
+          { label: 'Education', href: '#' },
+        ],
+      },
+    ],
+  },
+  { label: 'Pricing', href: '/pricing' },
+];
+---
+
+<style>
+  /* Using a class instead of group-hover for better JS control */
+  .mega-dropdown {
+    display: none;
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .mega-dropdown.is-active {
+    display: block;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .mega-panel { display: none; }
+  .mega-panel.is-active { display: block; }
+</style>
+
+<nav class="relative z-50 bg-white border-b shadow-sm">
+  <div class="relative px-4 mx-auto max-w-7xl">
+    <div class="flex items-center justify-between h-16">
+      
+      <div class="flex items-center space-x-8">
+        <a href="/" class="text-xl font-bold text-gray-800">MySite</a>
+
+        <ul class="flex items-center space-x-4">
+          {menuItems.map((item, idx) => (
+            <li class="nav-item">
+              {item.megaMenu ? (
+                <button
+                  type="button"
+                  class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 transition-colors menu-trigger hover:text-sky-600"
+                  data-index={idx}
+                >
+                  {item.label}
+                  <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2"/></svg>
+                </button>
+              ) : (
+                <a href={item.href} class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-600">{item.label}</a>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Search Box -->
+      <div class="hidden md:block">
+        <div class="relative">
+          <input type="text" placeholder="Search..." class="w-64 px-4 py-2 text-sm transition-all bg-gray-100 border-transparent rounded-lg focus:bg-white focus:ring-2 focus:ring-sky-500" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Centered Dropdown Container -->
+    <div id="mega-dropdown" class="mega-dropdown absolute left-1/2 top-full w-[min(95vw,1000px)] bg-white border border-gray-100 shadow-xl rounded-xl z-[60] overflow-hidden">
+      <div class="p-8">
+        {menuItems.map((item, idx) => item.megaMenu && (
+          <div class="mega-panel" data-panel={idx}>
+            <div class="grid grid-cols-3 gap-12">
+              {item.content?.map((col) => (
+                <div>
+                  <h3 class="mb-4 text-xs font-bold tracking-wider text-gray-400 uppercase">{col.title}</h3>
+                  <ul class="space-y-4">
+                    {col.links.map((lnk) => (
+                      <li>
+                        <a href={lnk.href} class="flex items-start space-x-3 group">
+                          {lnk.img && <img src={lnk.img} class="w-6 h-6 mt-0.5" alt="" />}
+                          <div>
+                            <div class="text-sm font-semibold text-gray-900 transition-colors group-hover:text-sky-600">{lnk.label}</div>
+                          </div>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const triggers = document.querySelectorAll('.menu-trigger');
+    const dropdown = document.getElementById('mega-dropdown');
+    const panels = document.querySelectorAll('.mega-panel');
+    let timeout;
+
+    const showMenu = (index) => {
+      clearTimeout(timeout);
+      dropdown.classList.add('is-active');
+      panels.forEach(p => {
+        p.classList.toggle('is-active', p.dataset.panel === index);
+      });
+    };
+
+    const hideMenu = () => {
+      timeout = setTimeout(() => {
+        dropdown.classList.remove('is-active');
+      }, 150); // Grace period to move mouse to menu
+    };
+
+    triggers.forEach(t => {
+      t.addEventListener('mouseenter', () => showMenu(t.dataset.index));
+      t.addEventListener('mouseleave', hideMenu);
+    });
+
+    dropdown.addEventListener('mouseenter', () => clearTimeout(timeout));
+    dropdown.addEventListener('mouseleave', hideMenu);
+  });
+</script>

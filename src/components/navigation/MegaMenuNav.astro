@@ -1,0 +1,216 @@
+---
+const { title = "My Site" } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+const isActive = (path: string): string => {
+  if (path === "/") {
+    return currentPath === "/" ? "active-link" : "";
+  }
+  return currentPath.startsWith(path) ? "active-link" : "";
+};
+
+const isServicesActive = (): boolean => {
+  return currentPath.startsWith("/web") || currentPath.startsWith("/seo");
+};
+---
+
+<nav id="navbar" class="sticky top-0 z-50 transition-all duration-300 bg-white/80 backdrop-blur-md">
+  <div class="px-4 mx-auto max-w-7xl">
+    <div class="flex items-center justify-between h-16">
+
+      <!-- Logo -->
+      <div class="text-xl font-bold">
+        {title}
+      </div>
+
+      <!-- Desktop Menu -->
+      <div class="items-center hidden space-x-8 md:flex">
+
+        <a href="/" class={`nav-link ${isActive("/")}`}>Home</a>
+        <a href="/about" class={`nav-link ${isActive("/about")}`}>About</a>
+
+        <!-- 🔥 Mega Menu -->
+        <div class="relative group">
+          <button class={`nav-link flex items-center gap-1 ${isServicesActive() ? "active-link" : ""}`}>
+            Services ▾
+          </button>
+
+          <div class="mega-menu">
+            
+            <!-- Column 1 -->
+            <div>
+              <h4 class="mega-title">Web</h4>
+              <a href="/web" class="mega-item">Website Design</a>
+              <a href="/web-dev" class="mega-item">Web Development</a>
+              <a href="/ecommerce" class="mega-item">eCommerce</a>
+            </div>
+
+            <!-- Column 2 -->
+            <div>
+              <h4 class="mega-title">Marketing</h4>
+              <a href="/seo" class="mega-item">SEO</a>
+              <a href="/ads" class="mega-item">Google Ads</a>
+              <a href="/social" class="mega-item">Social Media</a>
+            </div>
+
+            <!-- Column 3 -->
+            <div>
+              <h4 class="mega-title">Other</h4>
+              <a href="/branding" class="mega-item">Branding</a>
+              <a href="/consulting" class="mega-item">Consulting</a>
+            </div>
+
+          </div>
+        </div>
+
+        <a href="/contact" class={`nav-link ${isActive("/contact")}`}>Contact</a>
+
+      </div>
+
+      <!-- Mobile Button -->
+      <button id="menu-btn" class="text-2xl md:hidden">
+        ☰
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="px-4 overflow-hidden transition-all duration-300 max-h-0 md:hidden">
+
+    <a href="/" class={`block py-2 ${isActive("/")}`}>Home</a>
+    <a href="/about" class={`block py-2 ${isActive("/about")}`}>About</a>
+
+    <!-- Mobile Mega -->
+    <div>
+      <button id="mobile-services-btn" class="w-full py-2 text-left">
+        Services ▾
+      </button>
+
+      <div id="mobile-services-menu" class="pl-4 overflow-hidden transition-all duration-300 max-h-0">
+
+        <p class="mt-2 font-semibold">Web</p>
+        <a href="/web" class="block py-1">Website Design</a>
+        <a href="/web-dev" class="block py-1">Web Development</a>
+
+        <p class="mt-2 font-semibold">Marketing</p>
+        <a href="/seo" class="block py-1">SEO</a>
+        <a href="/ads" class="block py-1">Google Ads</a>
+
+      </div>
+    </div>
+
+    <a href="/contact" class={`block py-2 ${isActive("/contact")}`}>Contact</a>
+  </div>
+</nav>
+
+<style>
+  .nav-link {
+    position: relative;
+    color: #374151;
+    transition: color 0.3s;
+  }
+
+  .nav-link:hover {
+    color: #2563eb;
+  }
+
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0%;
+    height: 2px;
+    background: #2563eb;
+    transition: width 0.3s ease;
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+
+  .active-link {
+    color: #2563eb;
+    font-weight: 600;
+  }
+
+  .active-link::after {
+    width: 100%;
+  }
+
+  /* 🔥 Mega Menu */
+  .mega-menu {
+  position: absolute;
+  right: 0;
+  left: auto;
+  top: 100%;
+  width: min(90vw, 700px);
+  padding: 1.5rem;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: all 0.25s ease;
+  
+}
+
+  .group:hover .mega-menu {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .mega-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .mega-item {
+    display: block;
+    padding: 0.25rem 0;
+  }
+
+  .mega-item:hover {
+    color: #2563eb;
+  }
+</style>
+
+<script is:inline>
+  window.addEventListener("DOMContentLoaded", () => {
+    const menuBtn = document.getElementById("menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("max-h-screen");
+        mobileMenu.classList.toggle("max-h-0");
+      });
+    }
+
+    const mobileBtn = document.getElementById("mobile-services-btn");
+    const mobileMenuInner = document.getElementById("mobile-services-menu");
+
+    if (mobileBtn && mobileMenuInner) {
+      mobileBtn.addEventListener("click", () => {
+        mobileMenuInner.classList.toggle("max-h-40");
+        mobileMenuInner.classList.toggle("max-h-0");
+      });
+    }
+
+    const nav = document.getElementById("navbar");
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 10) {
+        nav?.classList.add("shadow-lg");
+      } else {
+        nav?.classList.remove("shadow-lg");
+      }
+    });
+  });
+</script>
