@@ -172,3 +172,13 @@ hr {
 .social-links a:hover {
 	color: rgb(var(--gray-dark));
 }
+
+.cta-section {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: #f8fafc;
+  border-radius: 1rem;
+  background:orange;
+}
+
+@import "tailwindcss";
