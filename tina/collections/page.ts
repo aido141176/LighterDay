@@ -18,6 +18,16 @@ export const PageCollection: Collection = {
       type: "object",
       list: true,
       templates: [
+            {
+      name: "hero",
+      label: "Hero",
+      fields: [
+        { type: "string", name: "headline", label: "Headline" },
+        { type: "string", name: "subtext", label: "Subtext" },
+        { type: "string", name: "buttonText", label: "Button Text" },
+        { type: "string", name: "buttonLink", label: "Button Link" }
+           ],
+         },
         {
           name: "cta",
           label: "CTA Section",
