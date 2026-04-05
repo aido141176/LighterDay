@@ -12,12 +12,166 @@ export const PageCollection: Collection = {
       type: "string",
       required: true,
     },
+    
     {
       name: "blocks",
       label: "Page Sections",
       type: "object",
       list: true,
       templates: [
+   {
+  name: "cardGridSection",
+  label: "Card Grid Section",
+  fields: [
+    {
+      type: "string",
+      name: "heading",
+      label: "Section title",
+      description: "Optional. If left empty the title will not display (no toggle needed). Example: Our Services",
+    },
+    {
+      type: "string",
+      name: "intro",
+      label: "Intro text",
+      description: "Optional short paragraph under the title. Leave empty if none.",
+      ui: {
+        component: "textarea",
+      },
+    },
+    {
+      type: "string",
+      name: "columns",
+      label: "Number of columns",
+      description: "Choose how many cards appear per row.",
+      options: [
+        { value: "2", label: "2 columns" },
+        { value: "3", label: "3 columns" },
+        { value: "4", label: "4 columns" },
+      ],
+      ui: {
+        component: "radio-group",
+      },
+    },
+    {
+      type: "string",
+      name: "sectionBackground",
+      label: "Section background",
+      description: "Choose the background colour for this section.",
+      options: [
+        { value: "white", label: "White" },
+        { value: "light", label: "Light grey" },
+        { value: "dark", label: "Dark" },
+        { value: "primary", label: "Primary colour" },
+      ],
+      ui: {
+        component: "radio-group",
+      },
+    },
+    {
+      type: "string",
+      name: "cardStyle",
+      label: "Card look",
+      description: "Choose how the cards should look (bordered / filled / minimal).",
+      options: [
+        { value: "bordered", label: "Bordered" },
+        { value: "filled", label: "Filled" },
+        { value: "minimal", label: "Minimal" },
+      ],
+      ui: {
+        component: "radio-group",
+      },
+    },
+    {
+      type: "string",
+      name: "cardImageSize",
+      label: "Image size",
+      description: "Select size used for card images.",
+      options: [
+        { value: "small", label: "Small" },
+        { value: "medium", label: "Medium" },
+        { value: "large", label: "Large" },
+      ],
+      ui: {
+        component: "radio-group",
+      },
+    },
+    {
+      type: "string",
+      name: "buttonStyle",
+      label: "Button look",
+      description: "Choose the button appearance for all cards in this section.",
+      options: [
+        { value: "primary", label: "Primary button" },
+        { value: "secondary", label: "Secondary button" },
+        { value: "outline", label: "Outline button" },
+        { value: "text", label: "Text link" },
+      ],
+      ui: {
+        component: "radio-group",
+      },
+    },
+    {
+      type: "string",
+      name: "hoverEffect",
+      label: "Hover animation",
+      description: "Add a small hover lift effect on cards (optional).",
+      options: [
+        { value: "on", label: "On" },
+        { value: "off", label: "Off" },
+      ],
+      ui: {
+        component: "radio-group",
+      },
+    },
+    {
+      type: "object",
+      name: "cards",
+      label: "Cards",
+      description: "Add one card item per card you want to display. Click 'Add' to create cards.",
+      list: true,
+      ui: {
+        itemProps: (item) => ({
+          label: item?.title ? `Card: ${item.title}` : "New Card",
+        }),
+      },
+      fields: [
+        {
+          type: "image",
+          name: "image",
+          label: "Card image",
+          description: "Upload an image to display above the card text.",
+        },
+        {
+          type: "string",
+          name: "title",
+          label: "Card title",
+          description: "Main heading for the card.",
+        },
+        {
+          type: "string",
+          name: "text",
+          label: "Card text",
+          description: "Short description for the card.",
+          ui: {
+            component: "textarea",
+          },
+        },
+        {
+          type: "string",
+          name: "buttonText",
+          label: "Button text",
+          description: "Optional. Leave blank for no button.",
+        },
+        {
+          type: "string",
+          name: "buttonLink",
+          label: "Button link",
+          description: "Optional. Destination URL for the button.",
+        },
+      ],
+    },
+  ],
+},
         {
           name: "hero",
           label: "Hero",

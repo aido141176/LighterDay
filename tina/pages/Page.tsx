@@ -1,6 +1,7 @@
 import { tinaField } from "tinacms/dist/react";
 import CTA from "../components/CTA";
 import Hero from "../components/Hero";
+import CardGridSection from "../components/CardGridSection";
 
 type Props = {
   page: any;
@@ -12,7 +13,7 @@ export default function Page({ page }: Props) {
 
   return (
     <main className="">
-      <div className="space-y-16">
+      <div className="">
         {blocks.map((block: any, index: number) => {
           switch (block.__typename) {
             case "PageBlocksHero":
@@ -28,6 +29,13 @@ export default function Page({ page }: Props) {
                   <CTA block={block} />
                 </div>
               );
+
+              case "PageBlocksCardGridSection":
+                return (
+                  <div key={index} data-tina-field={tinaField(page, "blocks")}>
+                    <CardGridSection block={block} />
+                  </div>
+                );
 
             default:
               return null;
