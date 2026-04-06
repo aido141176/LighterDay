@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import react from '@astrojs/react';
@@ -25,5 +25,22 @@ export default defineConfig({
 				}
 			}
 		}
-	}
+	},
+	  experimental: {
+    // In 5.16.16, fonts MUST be inside experimental
+    fonts: [
+      {
+        provider: fontProviders.fontsource(),
+        name: 'Poppins',
+        cssVariable: '--font-poppins',
+        weights: [900], // Must be an array of numbers
+      },
+      {
+        provider: fontProviders.fontsource(),
+        name: 'Merriweather',
+        cssVariable: '--font-merriweather',
+        weights: [400],
+      },
+    ],
+  },
 });

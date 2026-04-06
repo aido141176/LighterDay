@@ -19,7 +19,7 @@ export const PageCollection: Collection = {
       type: "object",
       list: true,
       templates: [
-   {
+{
   name: "cardGridSection",
   label: "Card Grid Section",
   fields: [
@@ -27,13 +27,13 @@ export const PageCollection: Collection = {
       type: "string",
       name: "heading",
       label: "Section title",
-      description: "Optional. If left empty the title will not display (no toggle needed). Example: Our Services",
+      description: "Optional. If empty the title will not display.",
     },
     {
       type: "string",
       name: "intro",
       label: "Intro text",
-      description: "Optional short paragraph under the title. Leave empty if none.",
+      description: "Optional short paragraph under the title.",
       ui: {
         component: "textarea",
       },
@@ -42,7 +42,7 @@ export const PageCollection: Collection = {
       type: "string",
       name: "columns",
       label: "Number of columns",
-      description: "Choose how many cards appear per row.",
+      description: "How many cards per row.",
       options: [
         { value: "2", label: "2 columns" },
         { value: "3", label: "3 columns" },
@@ -56,7 +56,7 @@ export const PageCollection: Collection = {
       type: "string",
       name: "sectionBackground",
       label: "Section background",
-      description: "Choose the background colour for this section.",
+      description: "Background colour for this section.",
       options: [
         { value: "white", label: "White" },
         { value: "light", label: "Light grey" },
@@ -71,7 +71,7 @@ export const PageCollection: Collection = {
       type: "string",
       name: "cardStyle",
       label: "Card look",
-      description: "Choose how the cards should look (bordered / filled / minimal).",
+      description: "Visual style of cards.",
       options: [
         { value: "bordered", label: "Bordered" },
         { value: "filled", label: "Filled" },
@@ -81,25 +81,64 @@ export const PageCollection: Collection = {
         component: "radio-group",
       },
     },
+
+    // New alignment controls
+    {
+      type: "string",
+      name: "cardTitleAlignment",
+      label: "Card title alignment",
+      description: "Align card titles left or center.",
+      options: [
+        { value: "left", label: "Left" },
+        { value: "center", label: "Center" },
+      ],
+      ui: { component: "radio-group" },
+    },
+    {
+      type: "string",
+      name: "cardTextAlignment",
+      label: "Card text alignment",
+      description: "Align card body text left or center.",
+      options: [
+        { value: "left", label: "Left" },
+        { value: "center", label: "Center" },
+      ],
+      ui: { component: "radio-group" },
+    },
+    {
+      type: "string",
+      name: "cardButtonAlignment",
+      label: "Card button alignment",
+      description: "Align the card button inside each card.",
+      options: [
+        { value: "left", label: "Left" },
+        { value: "center", label: "Center" },
+        { value: "right", label: "Right" },
+      ],
+      ui: { component: "radio-group" },
+    },
+
     {
       type: "string",
       name: "cardImageSize",
       label: "Image size",
-      description: "Select size used for card images.",
+      description: "Size used for card images; 'full' will fill the card top area.",
       options: [
         { value: "small", label: "Small" },
         { value: "medium", label: "Medium" },
         { value: "large", label: "Large" },
+        { value: "full", label: "Full (cover top of card)" },
       ],
       ui: {
         component: "radio-group",
       },
     },
+
     {
       type: "string",
       name: "buttonStyle",
       label: "Button look",
-      description: "Choose the button appearance for all cards in this section.",
+      description: "Appearance of card buttons.",
       options: [
         { value: "primary", label: "Primary button" },
         { value: "secondary", label: "Secondary button" },
@@ -127,7 +166,7 @@ export const PageCollection: Collection = {
       type: "object",
       name: "cards",
       label: "Cards",
-      description: "Add one card item per card you want to display. Click 'Add' to create cards.",
+      description: "Add card items. Click 'Add' to create a card.",
       list: true,
       ui: {
         itemProps: (item) => ({
@@ -145,7 +184,7 @@ export const PageCollection: Collection = {
           type: "string",
           name: "title",
           label: "Card title",
-          description: "Main heading for the card.",
+          description: "Card heading.",
         },
         {
           type: "string",
@@ -160,19 +199,18 @@ export const PageCollection: Collection = {
           type: "string",
           name: "buttonText",
           label: "Button text",
-          description: "Optional. Leave blank for no button.",
+          description: "Optional text for the CTA button.",
         },
         {
           type: "string",
           name: "buttonLink",
           label: "Button link",
-          description: "Optional. Destination URL for the button.",
+          description: "Optional: URL that the button should link to.",
         },
       ],
     },
   ],
-},
-        {
+},        {
           name: "hero",
           label: "Hero",
           fields: [

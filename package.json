@@ -12,6 +12,8 @@
     "@astrojs/react": "^4.4.2",
     "@astrojs/rss": "^4.0.15",
     "@astrojs/sitemap": "^3.7.0",
+    "@fontsource/merriweather": "^5.2.11",
+    "@fontsource/poppins": "^5.2.7",
     "@tailwindcss/vite": "^4.2.2",
     "@tanstack/react-virtual": "^3.13.18",
     "astro": "^5.16.16",

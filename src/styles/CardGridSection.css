@@ -1,0 +1,32 @@
+section.bg-slate-900 h2,section.bg-slate-900 h3{
+   color:beige
+}
+
+
+section.bg-slate-900 p{
+   color:rgb(135, 150, 171)
+}
+
+section.card-grid article{
+  max-width: none;
+  width: auto;
+}
+
+section.card-grid article figure.p-6{
+text-align: center;
+padding-bottom: 0px;
+padding-top: 40px;
+}
+
+section.card-grid article img{
+    border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+section.card-grid article figure.p-6 img{
+display:inline
+}
+
+section.card-grid article{
+padding:0px;
+}

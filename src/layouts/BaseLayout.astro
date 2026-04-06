@@ -2,7 +2,7 @@
 import "../styles/global.css";
 import BasicNav from "../components/navigation/BasicNav.astro";
 import Footer from "../components/ui/Footer.astro";
-
+import { Font } from 'astro:assets';
 
 const {
   title = "My Site",
@@ -48,9 +48,11 @@ const {
         "description": description
       })}
       </script>
+        <Font cssVariable="--font-poppins" preload />
+        <Font cssVariable="--font-merriweather" preload />
   </head>
 
-  <body class="text-gray-800 bg-white">
+  <body class="text-gray-800 bg-white hello">
 
     <BasicNav />
 

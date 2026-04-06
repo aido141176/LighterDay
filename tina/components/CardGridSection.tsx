@@ -1,11 +1,11 @@
 import { tinaField } from "tinacms/dist/react";
+import "../../src/styles/CardGridSection.css";
 
 type Props = {
   block: any;
 };
 
 export default function CardGridSection({ block }: Props) {
-  // defaults that match your requested simplifications
   const heading = block?.heading ?? "";
   const intro = block?.intro ?? "";
   const columns = block?.columns ?? "3";
@@ -16,7 +16,10 @@ export default function CardGridSection({ block }: Props) {
   const hoverEffect = block?.hoverEffect ?? "on";
   const cards = block?.cards ?? [];
 
-  // fixed spacing / contained container
+  const cardTitleAlignment = block?.cardTitleAlignment ?? "center";
+  const cardTextAlignment = block?.cardTextAlignment ?? "center";
+  const cardButtonAlignment = block?.cardButtonAlignment ?? "center";
+
   const spacingClass = "pt-16 pb-16";
   const containerClass = "mx-auto max-w-6xl px-4";
 
@@ -31,12 +34,11 @@ export default function CardGridSection({ block }: Props) {
     sectionBackground === "light"
       ? "bg-slate-50"
       : sectionBackground === "dark"
-      ? "bg-slate-900 text-white"
+      ? "mydark"
       : sectionBackground === "primary"
       ? "bg-blue-600 text-white"
       : "bg-white";
 
-  // card style classes (kept simple)
   const cardStyleClass =
     cardStyle === "filled"
       ? sectionBackground === "dark" || sectionBackground === "primary"
@@ -48,15 +50,28 @@ export default function CardGridSection({ block }: Props) {
       ? "bg-transparent border border-white/20 text-white"
       : "bg-white border border-slate-200 text-slate-900 shadow-sm";
 
-  const cardTextClass =
-    sectionBackground === "dark" || sectionBackground === "primary"
-      ? "text-white/80"
-      : "text-slate-600";
+  const textColorClass =
+    sectionBackground === "dark" || sectionBackground === "primary" ? "text-white/80" : "text-slate-600";
 
   const hoverClass = hoverEffect === "on" ? "transition duration-300 hover:-translate-y-1 hover:shadow-lg" : "";
 
+  // image size classes; 'full' will use object-cover and a larger fixed height
   const imageSizeClass =
-    cardImageSize === "small" ? "h-12 w-12" : cardImageSize === "large" ? "h-24 w-24" : "h-16 w-16";
+    cardImageSize === "small"
+      ? "h-12 w-12 object-cover"
+      : cardImageSize === "large"
+      ? "h-24 w-full object-cover"
+      : cardImageSize === "full"
+      ? "w-full h-56 md:h-72 object-cover"
+      : "h-16 w-full object-cover"; // medium default
+
+  // title/text alignment classes
+  const titleAlignClass = cardTitleAlignment === "left" ? "text-left" : "text-center";
+  const textAlignClass = cardTextAlignment === "left" ? "text-left" : "text-center";
+
+  // button alignment wrapper classes
+  const buttonJustifyClass =
+    cardButtonAlignment === "left" ? "justify-start" : cardButtonAlignment === "right" ? "justify-end" : "justify-center";
 
   const buttonClass =
     buttonStyle === "secondary"
@@ -76,9 +91,8 @@ export default function CardGridSection({ block }: Props) {
       : "bg-blue-600 text-white hover:bg-blue-700";
 
   return (
-    <section className={`${spacingClass} ${sectionBackgroundClass}`}>
+    <section className={`card-grid ${spacingClass} ${sectionBackgroundClass}`}>
       <div className={containerClass}>
-        {/* Heading / Intro: only render when present; centered by default */}
         {(heading || intro) && (
           <div className="mx-auto mb-10 max-w-3xl text-center">
             {heading && (
@@ -95,37 +109,45 @@ export default function CardGridSection({ block }: Props) {
         )}
 
         <div className={`grid gap-6 ${gridColsClass}`}>
-          {cards.map((card: any, index: number) => {
+          {cards.map((card: any, idx: number) => {
+            // determine if this image should be displayed as full-width cover or top small icon
+            const isFullImage = cardImageSize === "full";
             return (
-              <div key={index} className={`rounded-xl p-6 ${cardStyleClass} ${hoverClass} flex flex-col items-center text-center`}>
+              <article key={idx} className={`flex flex-col h-full rounded-xl overflow-hidden ${cardStyleClass} ${hoverClass}`}>
+                {/* If 'full' we want image to fill the top; otherwise image is a top media with some padding */}
                 {card?.image && (
-                  // Tina image binding
-                  <img
-                    src={card.image}
-                    alt={card.title || ""}
-                    className={`mb-4 rounded object-cover ${imageSizeClass}`}
-                    data-tina-field={tinaField(card, "image")}
-                  />
+                  <figure className={`${isFullImage ? "" : "p-6 pt-6"} w-full`}>
+                    <img
+                      src={card.image}
+                      alt={card.title || ""}
+                      className={`${imageSizeClass} rounded ${isFullImage ? "" : ""}`}
+                      data-tina-field={tinaField(card, "image")}
+                    />
+                  </figure>
                 )}
 
-                <h3 className="mb-3 text-xl font-semibold" data-tina-field={tinaField(card, "title")}>
-                  {card.title}
-                </h3>
+                <div className="card-body p-6 flex flex-col flex-1">
+                  <h3 className={`mb-3 text-xl font-semibold ${titleAlignClass}`} data-tina-field={tinaField(card, "title")}>
+                    {card.title}
+                  </h3>
 
-                <p className={cardTextClass} data-tina-field={tinaField(card, "text")}>
-                  {card.text}
-                </p>
+                  <p className={`flex-1 ${textColorClass} ${textAlignClass} flex-1`} data-tina-field={tinaField(card, "text")}>
+                    {card.text}
+                  </p>
 
-                {card.buttonText && card.buttonLink && (
-                  <a
-                    href={card.buttonLink}
-                    className={`mt-5 inline-block rounded-lg px-4 py-2 text-sm font-medium ${buttonClass}`}
-                    data-tina-field={tinaField(card, "buttonText")}
-                  >
-                    {card.buttonText}
-                  </a>
-                )}
-              </div>
+                  {card.buttonText && card.buttonLink && (
+                    <div className={`card-actions mt-4 flex ${buttonJustifyClass}`}>
+                      <a
+                        href={card.buttonLink}
+                        className={`inline-block rounded-lg px-4 py-2 text-sm font-medium ${buttonClass}`}
+                        data-tina-field={tinaField(card, "buttonText")}
+                      >
+                        {card.buttonText}
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </article>
             );
           })}
         </div>
