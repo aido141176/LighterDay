@@ -59,9 +59,8 @@ export const PageCollection: Collection = {
       description: "Background colour for this section.",
       options: [
         { value: "white", label: "White" },
-        { value: "light", label: "Light grey" },
+        { value: "light", label: "Light Hue" },
         { value: "dark", label: "Dark" },
-        { value: "primary", label: "Primary colour" },
       ],
       ui: {
         component: "radio-group",

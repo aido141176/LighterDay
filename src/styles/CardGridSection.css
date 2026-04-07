@@ -30,3 +30,42 @@ display:inline
 section.card-grid article{
 padding:0px;
 }
+
+section.card-grid.mydark {
+  h2{
+    color:var(--color-electric-lime-100);
+  }
+  p{
+    color:var(--color-electric-lime-200);
+  }
+  article.myfill{
+    border-top: 4px solid #84cc16;
+  background:var(--color-electric-lime-200);
+    h3{
+      color:var(--color-electric-lime-800);
+    }
+    p{
+      color:var(--color-electric-lime-700);
+    }
+  }
+}
+
+
+
+section.mylight .myfiller{
+border-color: var(--color-slate-200);
+border-style: var(--tw-border-style);
+border-width: 1px;
+border-top: 4px solid #84cc16;
+box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+
+section.bg-white .myfiller{
+border-color: var(--color-slate-200);
+border-style: var(--tw-border-style);
+border-width: 1px;
+border-top: 4px solid #84cc16;
+ background:var(--color-electric-lime-100);
+
+box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}

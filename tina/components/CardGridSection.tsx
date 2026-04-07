@@ -32,23 +32,23 @@ export default function CardGridSection({ block }: Props) {
 
   const sectionBackgroundClass =
     sectionBackground === "light"
-      ? "bg-slate-50"
+      ? "mylight"
       : sectionBackground === "dark"
       ? "mydark"
       : sectionBackground === "primary"
-      ? "bg-blue-600 text-white"
+      ? "myprimary"
       : "bg-white";
 
   const cardStyleClass =
     cardStyle === "filled"
       ? sectionBackground === "dark" || sectionBackground === "primary"
-        ? "bg-white/10 border border-white/10 text-white"
-        : "bg-slate-100 border border-slate-100 text-slate-900"
+        ? "myfill"
+        : "myfiller"
       : cardStyle === "minimal"
       ? "bg-transparent border-0 shadow-none text-inherit"
       : sectionBackground === "dark" || sectionBackground === "primary"
-      ? "bg-transparent border border-white/20 text-white"
-      : "bg-white border border-slate-200 text-slate-900 shadow-sm";
+      ? "bg-transparent border border-white/20 text-white myminimal"
+      : "no-white border border-slate-200 text-slate-900 shadow-sm";
 
   const textColorClass =
     sectionBackground === "dark" || sectionBackground === "primary" ? "text-white/80" : "text-slate-600";
@@ -76,19 +76,19 @@ export default function CardGridSection({ block }: Props) {
   const buttonClass =
     buttonStyle === "secondary"
       ? sectionBackground === "dark" || sectionBackground === "primary"
-        ? "bg-slate-700 text-white hover:bg-slate-600"
-        : "bg-slate-200 text-slate-900 hover:bg-slate-300"
+        ? "bg-slate-700 text-white hover:bg-slate-600 mysecondary"
+        : "mysecondary"
       : buttonStyle === "outline"
       ? sectionBackground === "dark" || sectionBackground === "primary"
-        ? "border border-white text-white hover:bg-white hover:text-slate-900"
-        : "border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+        ? "border border-white text-white hover:bg-white hover:text-slate-900 myoutline"
+        : "border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white myoutline"
       : buttonStyle === "text"
       ? sectionBackground === "dark" || sectionBackground === "primary"
-        ? "bg-transparent p-0 text-white underline underline-offset-4 hover:text-slate-200"
-        : "bg-transparent p-0 text-blue-600 underline underline-offset-4 hover:text-blue-800"
+        ? "bg-transparent p-0 text-white underline underline-offset-4 hover:text-slate-200 mytext"
+        : "bg-transparent p-0 text-blue-600 underline underline-offset-4 hover:text-blue-800 mytext"
       : sectionBackground === "dark" || sectionBackground === "primary"
-      ? "bg-white text-slate-900 hover:bg-slate-100"
-      : "bg-blue-600 text-white hover:bg-blue-700";
+      ? "myprimary"
+      : "bg-blue-600 text-white hover:bg-blue-700 myprimary";
 
   return (
     <section className={`card-grid ${spacingClass} ${sectionBackgroundClass}`}>

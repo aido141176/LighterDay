@@ -169,39 +169,8 @@ hr {
 
 @import "tailwindcss";
 
-:root {
-  --main-bg-color: #0c6045;
-  --primary-accent: #ff3700;
-  --color-primary: blue;
-  --color-secondary: teal;
-}
-
-  .hello {
-background-color: var(--main-bg-color);
-color: var(--primary-accent);
-  }
 
 
-  h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	margin: 0 0 0.5rem 0;
-	color: var(--primary-accent);
-	line-height: 1.2;
-}
-
-.mybuttoncolor {
-  background-color: var(--primary-accent);
-  color: var( --color-secondary);
-}
-
-.mybuttoncolor:hover {
-  background-color: var( --color-secondary);
-  color: var( --primary-accent);
-}
 
 
 
@@ -216,8 +185,8 @@ h6 {
   --color-electric-lime-700: #4d7c0f;
   --color-electric-lime-800: #365314;
 
-   --font-poppins: var(--font-poppins), sans-serif;
-  --font-merriweather: var(--font-merriweather), serif;
+  --font-poppins: 'Poppins', sans-serif;
+--font-merriweather: 'Merriweather', serif;
 }
 
 /* Utility Classes */
@@ -249,8 +218,26 @@ h6 {
 .text-electric-lime-800 { color: var(--color-electric-lime-800); }
 .border-electric-lime-800 { border-color: var(--color-electric-lime-800); }
 
-h1,h2{
-	font-family: var(--font-merriweather);
+a{
+	color:var(--color-electric-lime-800);
+}
+
+a:hover{
+	color: black;
+}
+a.myoutline{
+color: var(--color-electric-lime-800);
+border-color: var(--color-electric-lime-800);
+}
+h1,h2,h3{
+	font-family: var(--font-poppins), sans-serif;
+	color: var(--color-electric-lime-700);
+}
+
+p{
+	font-family: var(--font-merriweather), serif;
+	font-size:22px;
+	line-height:1.2;
 }
 section.mydark{
 	background-color: var(--color-electric-lime-600);
@@ -260,26 +247,34 @@ section.mydark{
 	p{
 		color: var(--color-electric-lime-800);
 	}
+}
 
-	article{
-		figure{
-			border-top: 4px solid #84cc16;
-		}
-		.card-body{
-			p{
-				color:var(--color-electric-lime-800);
-			}
-			.card-actions{
-				a{
-					background-color: var(--color-electric-lime-800);
-					color: var(--color-electric-lime-400);
-				}
-				a:hover{
-					background-color: var(--color-electric-lime-400);
-					color: var(--color-electric-lime-800);
-				}
-			}
-		}
-
+section.mylight{
+	background:var(--color-electric-lime-50);
+	article.myfiller{
+				background: white;
+		border-top: 4px solid #84cc16;
 	}
+}
+
+
+
+a.myprimary{
+	background-color: var(--color-electric-lime-800);
+	color: var(--color-electric-lime-400);
+}
+
+a.myprimary:hover{
+	background-color: var(--color-electric-lime-400);
+	color: var(--color-electric-lime-800);
+}
+
+a.mysecondary{
+	background-color: var(--color-electric-lime-400);
+	color: var(--color-electric-lime-800);
+}
+
+a.mysecondary:hover{
+	background-color: var(--color-electric-lime-800);
+	color: var(--color-electric-lime-400);
 }
