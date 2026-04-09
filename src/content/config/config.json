@@ -6,24 +6,16 @@
   },
   "nav": [
     {
-      "title": "Home",
-      "link": "/"
+      "title": "gghggj",
+      "link": "about/"
     },
     {
-      "title": "Blog",
-      "link": "/blog"
-    },
-    {
-      "title": "About",
+      "title": "hjggb",
       "link": "/about",
       "submenu": [
         {
-          "label": "test",
-          "link": "/blog"
-        },
-        {
-          "label": "Test2",
-          "link": "/about"
+          "label": "hhhj",
+          "link": "about/"
         }
       ]
     }
