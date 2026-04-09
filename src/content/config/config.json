@@ -15,7 +15,17 @@
     },
     {
       "title": "About",
-      "link": "/about"
+      "link": "/about",
+      "submenu": [
+        {
+          "label": "test",
+          "link": "/blog"
+        },
+        {
+          "label": "Test2",
+          "link": "/about"
+        }
+      ]
     }
   ],
   "contactLinks": [

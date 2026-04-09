@@ -64,7 +64,20 @@ export const GlobalConfigCollection: Collection = {
           type: "string",
           required: true
 
-        }
+        },
+        {
+          label: "Sub Menu ",
+          name: "submenu",
+          type: "object",
+          list: true, // Allows nested dropdown items
+          ui: {
+              itemProps: (item) => ({ label: item?.label }), // Submenu label
+            },
+          fields: [
+            { label: "Sub Label", name: "label", type: "string" },
+            { label: "Sub Link", name: "link", type: "string" },
+          ],
+        },
       ]
     },
     {
