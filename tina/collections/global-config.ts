@@ -44,41 +44,70 @@ export const GlobalConfigCollection: Collection = {
       label: "Site Navigation Menu (Reorder, Add, Remove)",
       type: "object",
       list: true,
-      ui: {
-        itemProps: (item) => {
-          return {
-            label: item.title
-          };
-        },
-      },
-      fields: [
-        {
-          name: "title",
-          label: "Title of Nav Item",
-          type: "string",
-          required: true
-        },
-        {
-          name: "link",
-          label: "Path of the Nav Item",
-          type: "string",
-          required: true
-
-        },
-        {
-          label: "Sub Menu ",
-          name: "submenu",
-          type: "object",
-          list: true, // Allows nested dropdown items
-          ui: {
-              itemProps: (item) => ({ label: item?.label }), // Submenu label
-            },
-          fields: [
-            { label: "Sub Label", name: "label", type: "string" },
-            { label: "Sub Link", name: "link", type: "string" },
-          ],
-        },
-      ]
+ 
+            templates: [
+              {
+                name: "simpleLink",
+                label: "Simple Link",
+                ui: {
+                  itemProps: (item) => ({ label: `Link: ${item?.label}` }),
+                },
+                fields: [
+                  { name: "label", label: "Label", type: "string" },
+                  { name: "link", label: "Link", type: "string" },
+                ],
+              },
+              {
+                name: "dropdown",
+                label: "Dropdown Menu",
+                ui: {
+                  itemProps: (item) => ({ label: `Dropdown: ${item?.label}` }),
+                },
+                fields: [
+                  { name: "label", label: "Parent Label", type: "string" },
+                  {
+                    name: "subMenu",
+                    label: "Sub Menu Items",
+                    type: "object",
+                    list: true,
+                    ui: { itemProps: (item) => ({ label: item?.label }) },
+                    fields: [
+                      { name: "label", label: "Label", type: "string" },
+                      { name: "link", label: "Link", type: "string" },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "megaMenu",
+                label: "Mega Menu",
+                ui: {
+                  itemProps: (item) => ({ label: `Mega: ${item?.label}` }),
+                },
+                fields: [
+                  { name: "label", label: "Parent Label", type: "string" },
+                  {
+                    name: "columns",
+                    label: "Menu Columns",
+                    type: "object",
+                    list: true,
+                    fields: [
+                      { name: "title", label: "Column Title", type: "string" },
+                      { 
+                        name: "links", 
+                        label: "Links", 
+                        type: "object", 
+                        list: true, 
+                        fields: [
+                          { name: "label", label: "Label", type: "string" },
+                          { name: "link", label: "Link", type: "string" }
+                        ] 
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
     },
     {
       name: "contactLinks",

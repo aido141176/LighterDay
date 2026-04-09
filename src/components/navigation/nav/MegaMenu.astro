@@ -1,0 +1,50 @@
+---
+// src/components/nav/MegaMenu.astro
+interface Props {
+  label: string;
+  columns: {
+    title: string;
+    links: {
+      label: string;
+      link: string;
+    }[];
+  }[];
+}
+
+// Ensure there is a space after the interface before this line
+const { label, columns } = Astro.props;
+
+---
+
+<div class="relative group py-4">
+  <!-- The Parent Trigger -->
+  <button class="flex items-center gap-1 font-medium hover:text-blue-600 transition-colors">
+    {label}
+    <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+
+  <!-- The Mega Menu Panel -->
+  <div class="absolute left-1/2 -translate-x-1/2 top-full hidden group-hover:grid w-[600px] bg-white shadow-xl border border-gray-100 p-6 grid-cols-3 gap-8 z-50 rounded-lg">
+    {columns?.map((col) => (
+      <div>
+        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4">
+          {col.title}
+        </h3>
+        <ul class="space-y-3">
+          {col.links?.map((item) => (
+            <li>
+              <a 
+                href={item.link} 
+                class="text-gray-600 hover:text-blue-600 block transition-colors"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</div>

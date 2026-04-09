@@ -1,0 +1,19 @@
+---
+interface Props {
+  label: string;
+  subMenu: {
+    label: string;
+    link: string;
+  }[];
+}
+
+const { label, subMenu } = Astro.props;
+---
+<div class="relative group">
+  <button class="flex items-center gap-1">{label} ▾</button>
+  <div class="absolute hidden group-hover:block bg-white shadow-lg p-2 min-w-[150px]">
+    {subMenu?.map((sub) => (
+      <a href={sub.link} class="block py-1 hover:bg-gray-100 px-2">{sub.label}</a>
+    ))}
+  </div>
+</div>

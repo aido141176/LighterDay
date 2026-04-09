@@ -1,11 +1,16 @@
 ---
 import "../styles/global.css";
-import BasicNav from "../components/navigation/BasicNav.astro";
+import NewNav from "../components/navigation/NewNav.astro";
 import Footer from "../components/ui/Footer.astro";
 import { Font } from 'astro:assets';
 import config from "../content/config/config.json";
 
+import { client } from '../../tina/__generated__/client';
 
+const response = await client.queries.config({ relativePath: 'config.json' });
+// Double check this path! Is it global.nav or global.navigation?
+const navItems = response.data.config.nav;
+console.log("NAV ITEMS:", navItems); 
 const {
   title = config.seo.title || "My Site",
   description = "Default description",
@@ -56,9 +61,9 @@ const {
 
   <body class="text-gray-800 bg-white hello">
 
-    <BasicNav />
+  <NewNav navData={navItems} /> 
 
- 
+
    
 
      <div>

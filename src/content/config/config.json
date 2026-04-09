@@ -6,18 +6,38 @@
   },
   "nav": [
     {
-      "title": "gghggj",
-      "link": "about/"
+      "label": "hello",
+      "link": "about/",
+      "_template": "simpleLink"
     },
     {
-      "title": "hjggb",
-      "link": "/about",
-      "submenu": [
+      "label": "hello",
+      "subMenu": [
         {
-          "label": "hhhj",
+          "label": "what",
           "link": "about/"
+        },
+        {
+          "label": "yep",
+          "link": "hello/"
         }
-      ]
+      ],
+      "_template": "dropdown"
+    },
+    {
+      "label": "mega",
+      "columns": [
+        {
+          "title": "col1",
+          "links": [
+            {
+              "label": "col1 link1",
+              "link": "asesd/"
+            }
+          ]
+        }
+      ],
+      "_template": "megaMenu"
     }
   ],
   "contactLinks": [
