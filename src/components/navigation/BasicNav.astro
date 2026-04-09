@@ -1,4 +1,9 @@
 ---
+
+import HeaderLink from "../HeaderLink.astro";
+import config from "../../content/config/config.json";
+
+
 const { title = "My Site" } = Astro.props;
 const currentPath = Astro.url.pathname;
 
@@ -20,11 +25,17 @@ const isServicesActive = (): boolean => {
 
       <!-- Logo -->
       <div class="text-xl font-bold">
-        {title}
+        {title} {config.seo.title}
       </div>
 
       <!-- Desktop Menu -->
      <div class="items-center hidden space-x-8 md:flex">
+
+      {
+				config.nav.map((nav) => (
+					<HeaderLink href={nav.link} class={`nav-link ${isActive(nav.link)}`}>{nav.title}</HeaderLink>
+				))
+			}
 
   <a href="/" class={`nav-link ${isActive("/")}`}>Home</a>
   <a href="/about" class={`nav-link ${isActive("/about")}`}>About</a>

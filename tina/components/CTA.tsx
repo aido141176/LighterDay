@@ -6,7 +6,7 @@ type Props = {
 
 export default function CTA({ block }: Props) {
   const { sectionBackground } = block;
-
+ const textAlign = block?.textAlign ?? "center";
   const sectionBackgroundClass =
     sectionBackground === "light"
       ? "mylight"
@@ -15,9 +15,19 @@ export default function CTA({ block }: Props) {
       : sectionBackground === "white"
       ? "mmywhite"
       : "bg-white";
+
+        const alignmentClasses = {
+          left: "items-start text-left",
+          center: "items-center text-center",
+          right: "items-end text-right",
+        };
+
+        const contentAlignment =
+    alignmentClasses[textAlign as keyof typeof alignmentClasses] ??
+    alignmentClasses.center;
       
   return (
-    <section className={`py-16 ${sectionBackgroundClass}`}>
+    <section className={`py-16 ${sectionBackgroundClass} ${contentAlignment}`}>
       <h2
         className="text-4xl font-extrabold tracking-tight md:text-5xl"
         data-tina-field={tinaField(block, "headline")}

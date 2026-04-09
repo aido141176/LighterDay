@@ -7,6 +7,7 @@ import Header from "../components/Header.astro";
 import BaseHead from "../components/BaseHead.astro";
 import config from '../content/config/config.json';
 import PageRenderer from "../../tina/pages/PageRenderer";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
 	const page = await getCollection("page");
@@ -26,6 +27,12 @@ export async function getStaticPaths() {
 
 const { getTinaProps } = Astro.props;
 const data = await getTinaProps();
+
+console.log("Props received:", { getTinaProps, data });
+
+const fruits = ['apple', 'banana', 'cherry'];
+console.log(fruits);
+
 ---
 
 <!doctype html>
@@ -35,6 +42,7 @@ const data = await getTinaProps();
 	</head>
 	<body>
 		<Header />
+		<h1>kjhsdbgjlkfhsljfh</h1>
 		<PageRenderer {...data} client:tina />
 		
 		<Footer />

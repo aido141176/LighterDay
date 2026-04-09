@@ -6,6 +6,19 @@ export const ctaBlock: Template = {
   label: "CTA",
   fields: [
     sectionBackgroundField,
+        {
+        type: "string",
+        name: "textAlign",
+        label: "Text Alignment",
+        options: [
+        { value: "left", label: "Left" },
+        { value: "center", label: "Center" },
+        { value: "right", label: "Right" },
+        ],
+        ui: {
+        component: "radio-group",
+        },
+    },
     {
       type: "string",
       name: "headline",
