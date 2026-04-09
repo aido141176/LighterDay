@@ -1,0 +1,58 @@
+I'm not sure what model I would use. I would like the user to be able to create pages only. Then they would just use the already made components. I would picture it would have a left sidebar where pages could be created and below all the components that could be dragged out onto the page where they want it to go.
+
+
+I already have a LAMP stack VPS so I think SQLite/Postgres would be the way to go. 
+
+I actually have shared IP Cpanel/ LAMP stack account. It doesn't have Postgres installed but I think I could possibly install on my cpanel if I asked my host. I actually have managed LAML stack VPS before and know its possible through WHM.
+
+
+The reason I am thinking Postgres is because I would like to let the user to register for free/ design their website through the GUI and save the template and data. They could possibly preview the website in a temporary url(like WordPress does but before they 'Publish' they we have to pay a subscription fee.
+
+When the pay the fee they can publish which is a lot of stuff to do. I see this done multistep form. Main things that need to happen on this 'publish form':
+ - GitHub Repo is created(GitHub API)
+ - Vercel Project is created(Vercel API)
+ - Domain is registered(Goddady widget/plugin)
+ - Domain is added to Vercel account/ added to projecv (Vercel API)
+ - Vercel returns A/ Cname record to be added to Domain DNS (Vercel API)
+ - Then Publish button clicked/ markdown for Astro created and pushed to GitHub.
+
+I don't want to many npm run builds to occur which is why I want the user to create the design and content and save on a server before any run builds occur. Even after the original build I am considering only letting users run 5 npm run build in a day.
+
+I'm only thinking this way as these are the applications I am used to use. Do you think this is possible? Is there a better way to do it? I am dping this for commercial usage, do you think its worthwhile trying to builod? Is there any other platform that is doing similar or the same?
+
+
+I would like the head in the image to have an animation that resembles circuits in the brian morving around. I would also like it to animate glowing on and off. I would like head to say in same perportion of the canvas ie stay the same size in relation to canvas
+
+I would like the image of the face to the bottom animate and glow with different colors. I would like the stars at the top to sparkle like stars do. I would like one very small falling star go across the sky.
+
+
+Famous quote by Carl Yung
+Everything that irritates us about others can lead us to an understanding of ourselves.
+
+Famous quote by Carl Yung
+Who looks outside, dreams; who looks inside, awakes
+
+Famous quote by Carl Yung
+No tree can grow to heaven unless its roots reach down to hell.
+
+Famous quote by Carl Yung
+Your visions will become clear only when you can look into your own heart
+
+
+I am not what happened to me, I am what I choose to become
+
+
+
+Until you make the unconscious conscious, it will direct your life.
+
+There is no coming to consciousness without pain.
+
+
+
+
+
+
+ns1.amcd.com.au
+103.11.206.202
+ns2.amcd.com.au
+103.11.206.203

@@ -5,8 +5,19 @@ type Props = {
 };
 
 export default function CTA({ block }: Props) {
+  const { sectionBackground } = block;
+
+  const sectionBackgroundClass =
+    sectionBackground === "light"
+      ? "mylight"
+      : sectionBackground === "dark"
+      ? "mydark"
+      : sectionBackground === "white"
+      ? "mmywhite"
+      : "bg-white";
+      
   return (
-    <section className="mx-auto px-6 py-16 text-center shadow-sm">
+    <section className={`py-16 ${sectionBackgroundClass}`}>
       <h2
         className="text-4xl font-extrabold tracking-tight md:text-5xl"
         data-tina-field={tinaField(block, "headline")}

@@ -1,0 +1,5 @@
+Can you tell me why Tailwind css is preferred to bootstrap css for static websites, in general Astro projects? I can see there's a lot of classes, its quite neat when I look through browser/ inspect/inspector. However
+
+I am a PHP developer, I work a lot with Laravel(MVC), I would work in components very similar to this in fact. My point is I would only output 
+
+If I wanted to add a hero section to index.astro that operates same as CTA how would I do that?
