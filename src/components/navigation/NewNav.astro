@@ -8,8 +8,16 @@ import MegaMenu from './nav/MegaMenu.astro';
 
 const { navData } = Astro.props;
 ---
+<style>
+  nav {
+    display: flex;
+    gap: 1.5rem;
+    background: red;
+  }
+</style>
 
-<nav class="flex gap-4 items-center">
+<nav class="">
+    
   {navData?.map((item: any) => {
     switch (item.__typename) {
       case 'ConfigNavSimpleLink': // Matches your console log
@@ -27,4 +35,3 @@ const { navData } = Astro.props;
   })}
 </nav>
 
-<h1>svadvdvdsvsdv</h1>

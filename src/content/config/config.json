@@ -33,11 +33,47 @@
             {
               "label": "col1 link1",
               "link": "asesd/"
+            },
+            {
+              "label": "Item 2",
+              "link": "aboutg/"
+            }
+          ]
+        },
+        {
+          "title": "Col2",
+          "links": [
+            {
+              "label": "Yeh",
+              "link": "abouyt/"
+            }
+          ]
+        },
+        {
+          "title": "Menu 3",
+          "links": [
+            {
+              "label": "fuck",
+              "link": "about/"
+            }
+          ]
+        },
+        {
+          "title": "cmon",
+          "links": [
+            {
+              "label": "Lets go",
+              "link": "about/"
             }
           ]
         }
       ],
       "_template": "megaMenu"
+    },
+    {
+      "label": "Simplae 2",
+      "link": "simple/",
+      "_template": "simpleLink"
     }
   ],
   "contactLinks": [

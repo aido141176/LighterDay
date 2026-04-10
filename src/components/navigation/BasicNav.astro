@@ -1,9 +1,4 @@
 ---
-
-import HeaderLink from "../HeaderLink.astro";
-import config from "../../content/config/config.json";
-
-
 const { title = "My Site" } = Astro.props;
 const currentPath = Astro.url.pathname;
 
@@ -25,42 +20,29 @@ const isServicesActive = (): boolean => {
 
       <!-- Logo -->
       <div class="text-xl font-bold">
-        {title} {config.seo.title}
+        {title}
       </div>
 
       <!-- Desktop Menu -->
      <div class="items-center hidden space-x-8 md:flex">
 
+  <a href="/" class={`nav-link ${isActive("/")}`}>Home</a>
+  <a href="/about" class={`nav-link ${isActive("/about")}`}>About</a>
 
-      {
-  config.nav.map((nav) => {
-    // Check if there is a submenu with at least one item
-    const hasSubmenu = nav.submenu && nav.submenu.length > 0;
+  <!-- Services Dropdown -->
+  <div class="relative group">
+    <button class={`nav-link flex items-center gap-1 ${isServicesActive() ? "active-link" : ""}`}>
+      Services
+      <span>▾</span>
+    </button>
 
-    return hasSubmenu ? (
-      /* 1. Dropdown Structure */
-      <div class="relative group">
-        <button class={`nav-link flex items-center gap-1 ${isActive(nav.link) ? "active-link" : ""}`}>
-          {nav.title}
-          <span>▾</span>
-        </button>
+    <div class="dropdown-menu">
+      <a href="/web" class="dropdown-item">Web Design</a>
+      <a href="/seo" class="dropdown-item">SEO</a>
+    </div>
+  </div>
 
-        <div class="dropdown-menu">
-          {nav.submenu.map((sub) => (
-            <a href={sub.link} class="dropdown-item">
-              {sub.label}
-            </a>
-          ))}
-        </div>
-      </div>
-    ) : (
-      /* 2. Standard Link Structure */
-      <a href={nav.link} class={`nav-link ${isActive(nav.link)}`}>
-        {nav.title}
-      </a>
-    );
-  })
-}
+  <a href="/contact" class={`nav-link ${isActive("/contact")}`}>Contact</a>
 
 </div>
 
@@ -72,75 +54,32 @@ const isServicesActive = (): boolean => {
     </div>
   </div>
 
+  <!-- Mobile Menu -->
+  <div 
+    id="mobile-menu"
+    class="px-4 overflow-hidden transition-all duration-300 ease-in-out max-h-0 md:hidden"
+  >
+    <a href="/" class={`block py-2 ${isActive("/")}`}>Home</a>
+    <a href="/about" class={`block py-2 ${isActive("/about")}`}>About</a>
 
+    <!-- Mobile Dropdown -->
+    <div>
+      <button id="mobile-services-btn" class="w-full py-2 text-left">
+        Services ▾
+      </button>
 
+      <div 
+        id="mobile-services-menu"
+        class="pl-4 overflow-hidden transition-all duration-300 ease-in-out max-h-0"
+      >
+        <a href="/web" class="block py-2">Web Design</a>
+        <a href="/seo" class="block py-2">SEO</a>
+      </div>
+    </div>
 
-  <div id="mobile-menu" class="px-4 overflow-hidden transition-all duration-300 ease-in-out max-h-0 md:hidden">
-    {config.nav.map((nav, index) => {
-      const hasSubmenu = nav.submenu && nav.submenu.length > 0;
-      
-      return hasSubmenu ? (
-        /* Mobile Dropdown Item */
-        <div>
-          <button 
-            class="mobile-dropdown-btn w-full py-2 text-left flex justify-between items-center" 
-            data-target={`menu-${index}`}
-          >
-            {nav.title} <span>▾</span>
-          </button>
-
-          <div 
-            id={`menu-${index}`}
-            class="mobile-submenu pl-4 overflow-hidden transition-all duration-300 ease-in-out max-h-0"
-          >
-            {nav.submenu.map((sub) => (
-              <a href={sub.link} class="block py-2">{sub.label}</a>
-            ))}
-          </div>
-        </div>
-      ) : (
-        /* Regular Mobile Link */
-        <a href={nav.link} class={`block py-2 ${isActive(nav.link) ? 'active' : ''}`}>
-          {nav.title}
-        </a>
-      );
-    })}
+    <a href="/contact" class={`block py-2 ${isActive("/contact")}`}>Contact</a>
   </div>
-
 </nav>
-
-
-<script is:inline>
-  const dropdownBtns = document.querySelectorAll('.mobile-dropdown-btn');
-
-  dropdownBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const targetId = btn.getAttribute('data-target');
-      const menu = document.getElementById(targetId);
-
-      // Toggle the max-height for the smooth transition
-      if (menu.style.maxHeight && menu.style.maxHeight !== "0px") {
-        menu.style.maxHeight = "0px";
-        btn.querySelector('span').style.transform = "rotate(0deg)";
-      } else {
-        // Set to a large enough value or scrollHeight for the animation
-        menu.style.maxHeight = menu.scrollHeight + "px";
-        btn.querySelector('span').style.transform = "rotate(180deg)";
-      }
-    });
-  });
-</script>
-
-<style>
-  /* Optional: Smoothly rotate the arrow */
-  .mobile-dropdown-btn span {
-    transition: transform 0.3s ease;
-  }
-</style>
-
-
-
-
 
 <script is:inline>
   window.addEventListener("DOMContentLoaded", () => {
@@ -191,13 +130,6 @@ const isServicesActive = (): boolean => {
 </script>
 
 <style>
-
-  .dropdown-item[data-astro-cid-i6n4ee5k]:hover {
-    background: #f3f4f6;
-    border-radius: 6px;
-  }
-
-
   .nav-link {
     position: relative;
     color: #374151;
