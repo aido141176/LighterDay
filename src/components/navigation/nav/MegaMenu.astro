@@ -1,7 +1,8 @@
 ---
-// src/components/nav/MegaMenu.astro
+// src/components/navigation/nav/MegaMenu.astro
 interface Props {
   label: string;
+  alignment: string;
   columns: {
     title: string;
     links: {
@@ -11,46 +12,59 @@ interface Props {
   }[];
 }
 
-// Ensure there is a space after the interface before this line
-const { label, columns } = Astro.props;
+const { label, columns, alignment } = Astro.props;
 
+// Align the dropdown panel based on the navigation alignment
+const menuAlignClass = alignment === "justify-end" 
+  ? "right-0 origin-top-right text-right" 
+  : "left-0 origin-top-left text-left";
+
+// Align the underline direction
+const underlineClass = alignment === "justify-end" ? "right-0" : "left-0";
 ---
 
-<div class="relative group py-4">
-  <!-- The Parent Trigger -->
-  <button class="flex items-center gap-1 font-medium hover:text-blue-600 transition-colors">
+<div class="relative group h-full flex items-center">
+  <button class="relative py-2 font-medium flex items-center gap-1 transition-colors hover:text-blue-600">
     {label}
-    <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    
+    <!-- Rotating Arrow Icon -->
+    <svg 
+      xmlns="http://w3.org" 
+      class="h-4 w-4 transition-transform duration-300 group-hover:rotate-180" 
+      fill="none" 
+      viewBox="0 0 24 24" 
+      stroke="currentColor"
+    >
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
     </svg>
+
+    <!-- Animated Underline -->
+    <span class={`absolute bottom-0 h-0.5 bg-blue-600 transition-all duration-300 w-0 group-hover:w-full ${underlineClass}`}></span>
   </button>
 
-  <!-- The Mega Menu Panel -->
-  <div class="absolute left-1/2 -translate-x-1/2 top-full hidden group-hover:grid w-[600px] bg-white shadow-xl border border-gray-100 p-6 grid-cols-3 gap-8 z-50 rounded-lg">
-    {columns?.map((col) => (
-      <div>
-        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4">
-          {col.title}
-        </h3>
-        <ul class="space-y-3">
-          {col.links?.map((item) => (
-            <li>
-              <a 
-                href={item.link} 
-                class="text-gray-600 hover:text-blue-600 block transition-colors"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ))}
+  <!-- Mega Menu Panel -->
+  <div class={`
+    absolute top-full z-50 w-[600px] bg-white shadow-2xl p-8 rounded-b-lg border-t border-gray-100
+    invisible opacity-0 translate-y-2 scale-95
+    group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100
+    transition-all duration-300 ease-out
+    ${menuAlignClass}
+  `}>
+    <div class="grid grid-cols-3 gap-8">
+      {columns?.map((col) => (
+        <div class={alignment === "justify-end" ? "text-right" : "text-left"}>
+          <h3 class="font-bold text-gray-900 mb-4 uppercase text-xs tracking-widest">{col.title}</h3>
+          <ul class="space-y-2">
+            {col.links?.map((link) => (
+              <li>
+                <a href={link.link} class="text-sm text-gray-600 hover:text-blue-600 transition-colors">
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
   </div>
 </div>
-
-<style>
-    .group {
-        background:green;
-    }
-</style>

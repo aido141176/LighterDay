@@ -1,13 +1,10 @@
 ---
-// src/components/Navigation.astro
+// src/components/navigation/NewNav.astro
 import SimpleLink from './nav/SimpleLink.astro';
 import Dropdown from './nav/Dropdown.astro';
 import MegaMenu from './nav/MegaMenu.astro';
 import IconLink from "../react/IconLink";
 
-
-
-// src/components/navigation/NewNav.astro
 const { navData, socialData, styles } = Astro.props;
 
 // Fallbacks for when no option is selected
@@ -15,32 +12,24 @@ const bgClass = styles?.backgroundStyle || "bg-white";
 const positionClass = styles?.sticky || "relative";
 const alignmentClass = styles?.navPosition || "justify-start";
 ---
+
 <style>
-  nav {
-    display: flex;
-    gap: 1.5rem;
-  
+  /* Scoped styles for this component */
+  .mynavwrapper img {
+    max-width: 60px;
   }
-
- 
-
-  .mynavwrapper{
-    .container{
-
-        img{
-            max-width:60px;
-        }
-    }
+  
+  /* Smooth transition for the sticky header background change */
+  header.scrolled {
+    background-color: var(--color-electric-lime-50, #f7fee7) !important;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   }
 </style>
 
-
-
-
-<header class={`${positionClass} ${bgClass} transition-all duration-300 w-full mynavwrapper`}>
+<header class={`${positionClass} ${bgClass.includes('transparent') ? 'bg-white md:bg-transparent' : bgClass} transition-all duration-300 w-full mynavwrapper z-50`}>
   <div class="container mx-auto px-4 py-4 flex items-center justify-between">
     
-    <!-- 1. LOGO AREA (Far Left) -->
+    <!-- 1. LOGO AREA -->
     <div class="flex-shrink-0">
       {styles?.logo ? (
         <img src={styles.logo} alt="Logo" class="h-10 w-auto" />
@@ -49,42 +38,97 @@ const alignmentClass = styles?.navPosition || "justify-start";
       )}
     </div>
 
-    <!-- 2. MENU AREA (Dynamic Alignment) -->
-    <!-- flex-grow pushes items, while alignmentClass handles internal spacing -->
-    <!-- 2. MENU AREA -->
+    <!-- 2. DESKTOP MENU AREA (Hidden on Mobile) -->
     <div class={`hidden md:flex flex-grow px-8 ${alignmentClass}`}>
       <nav class="flex gap-6">
-        {navData?.map((item: any) => { // Changed ( to {
-            switch (item.__typename) {
-              case 'ConfigNavSimpleLink':
-                return <SimpleLink {...item} />;
-                
-              case 'ConfigNavDropdown':
-                return <Dropdown {...item} />;
-                
-              case 'ConfigNavMegaMenu':
-                return <MegaMenu {...item} />;
-                
-              default:
-                return null;
-            }
-        })} <!-- Changed ) to } -->
+        {navData?.map((item: any) => {
+          switch (item.__typename) {
+            case 'ConfigNavSimpleLink':
+              return <SimpleLink {...item} alignment={alignmentClass} />;
+            case 'ConfigNavDropdown':
+              return <Dropdown {...item} alignment={alignmentClass} />;
+            case 'ConfigNavMegaMenu':
+              return <MegaMenu {...item} alignment={alignmentClass} />;
+            default:
+              return null;
+          }
+        })}
       </nav>
     </div>
 
-
-    <!-- 3. SOCIALS (Far Right) -->
-    <div class="flex items-center gap-4 flex-shrink-0">
+    <!-- 3. DESKTOP SOCIALS (Hidden on Mobile) -->
+    <div class="hidden md:flex items-center gap-4 flex-shrink-0">
       {socialData?.map((item: any) => (
         <IconLink {...item} />
       ))}
     </div>
 
+    <!-- 4. HAMBURGER BUTTON (Visible only on Mobile) -->
+    <button id="menu-toggle" class="md:hidden p-2 text-gray-600 focus:outline-none" aria-label="Toggle Menu">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+      </svg>
+    </button>
+
+  </div> <!-- End of Top Container -->
+
+  <!-- 5. MOBILE MENU PANEL -->
+<div 
+  id="mobile-menu" 
+  class="md:hidden hidden flex-col bg-white border-t border-gray-100 px-4 py-6 space-y-4 fixed inset-x-0 top-[72px] bottom-0 overflow-y-auto z-50 shadow-xl"
+>    {navData?.map((item: any, index: number) => {
+      const hasChildren = item.subMenu || item.columns;
+      const targetId = `mobile-sub-${index}`;
+
+      if (!hasChildren) {
+        return <a href={item.link} class="block text-lg font-medium border-b border-gray-50 pb-2">{item.label}</a>;
+      }
+
+      return (
+        <div class="mobile-accordion-item">
+          <button 
+            class="mobile-accordion-trigger w-full flex justify-between items-center text-lg font-medium border-b border-gray-50 pb-2"
+            data-target={targetId}
+          >
+            {item.label}
+            <svg class="w-5 h-5 transition-transform duration-300 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          
+          <div id={targetId} class="mobile-accordion-content overflow-hidden max-h-0 transition-all duration-300 ease-in-out bg-gray-50">
+            <ul class="py-2 pl-4 space-y-2">
+              {item.subMenu?.map((sub: any) => (
+                <li><a href={sub.link} class="block py-1 text-gray-600">{sub.label}</a></li>
+              ))}
+              {item.columns?.map((col: any) => (
+                <li class="pt-2">
+                  <span class="text-xs uppercase text-gray-400 font-bold">{col.title}</span>
+                  {col.links?.map((link: any) => (
+                    <a href={link.link} class="block py-1 text-gray-600 pl-2">{link.label}</a>
+                  ))}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      );
+    })}
+
+    <!-- Mobile Social Links -->
+    <div class="pt-6 border-t border-gray-100 flex items-center justify-center gap-6">
+      {socialData?.map((item: any) => (
+        <div class="scale-125">
+          <IconLink {...item} />
+        </div>
+      ))}
+    </div>
   </div>
 </header>
 
+<!-- SCRIPT: Scroll Effect -->
 <script>
-  const header = document.querySelector('header.bg-transparent') as HTMLElement | null;
+  const header = document.querySelector('header') as HTMLElement | null;
   
   window.addEventListener('scroll', () => {
     if (header && window.scrollY > 50) {
@@ -94,3 +138,51 @@ const alignmentClass = styles?.navPosition || "justify-start";
     }
   });
 </script>
+
+<!-- SCRIPT: Accordion Logic -->
+<script>
+  const accordionButtons = document.querySelectorAll<HTMLButtonElement>('.mobile-accordion-trigger');
+
+  accordionButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      if (!targetId) return;
+
+      const content = document.getElementById(targetId) as HTMLElement | null;
+      const icon = btn.querySelector('svg') as SVGElement | null;
+
+      if (!content || !icon) return;
+
+      if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+        content.style.maxHeight = '0px';
+        icon.style.transform = 'rotate(0deg)';
+      } else {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        icon.style.transform = 'rotate(180deg)';
+      }
+    });
+  });
+</script>
+
+<!-- SCRIPT: Mobile Menu Toggle -->
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const body = document.body;
+
+  menuToggle?.addEventListener('click', () => {
+    if (mobileMenu) {
+      const isHidden = mobileMenu.classList.contains('hidden');
+      if (isHidden) {
+        mobileMenu.classList.remove('hidden');
+        mobileMenu.classList.add('flex');
+        body.style.overflow = 'hidden'; // Lock the page scroll
+      } else {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.classList.remove('flex');
+        body.style.overflow = ''; // Restore the page scroll
+      }
+    }
+  });
+</script>
+

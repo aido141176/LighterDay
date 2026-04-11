@@ -6,7 +6,7 @@
   },
   "navigationSettings": {
     "logo": "/2490299-200.png",
-    "navPosition": "justify-end",
+    "navPosition": "justify-start",
     "backgroundStyle": "bg-transparent",
     "sticky": "fixed top-0 left-0 w-full z-50"
   },

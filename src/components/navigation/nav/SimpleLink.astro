@@ -1,9 +1,9 @@
 ---
-const { label, link } = Astro.props;
+const { label, link, alignment } = Astro.props;
+const underlineClass = alignment === "justify-end" ? "right-0" : "left-0";
 ---
-<a href={link} class="hover:text-blue-500">{label}</a>
-<style>
-    a{
-        background:yellow;
-    }
-</style>
+<a href={link} class="relative py-2 group">
+  {label}
+  <span class={`absolute bottom-0 h-0.5 bg-blue-600 transition-all duration-300 w-0 group-hover:w-full ${underlineClass}`}></span>
+</a>
+
