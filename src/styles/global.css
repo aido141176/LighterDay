@@ -184,6 +184,7 @@ hr {
   --color-electric-lime-600: #65a30d;
   --color-electric-lime-700: #4d7c0f;
   --color-electric-lime-800: #365314;
+  --color-nav-scrolled: var(--color-electric-lime-50, #f7fee7);
 
   --font-poppins: 'Poppins', sans-serif;
 --font-merriweather: 'Merriweather', serif;
@@ -239,7 +240,7 @@ p{
 	font-size:22px;
 	line-height:1.2;
 }
-section.mydark{
+.mydark{
 	background-color: var(--color-electric-lime-600);
 	h2,h3{
 		color: var(--color-electric-lime-200);
@@ -249,14 +250,19 @@ section.mydark{
 	}
 }
 
-section.mylight{
+.mylight{
 	background:var(--color-electric-lime-50);
 	article.myfiller{
-				background: white;
-		border-top: 4px solid #84cc16;
+	border-top: 4px solid #84cc16;
 	}
 }
 
+section.mylight{
+	background:var(--color-electric-lime-50);
+	article.myfiller{
+	border-top: 4px solid #84cc16;
+	}
+}
 
 
 a.myprimary{
@@ -277,4 +283,18 @@ a.mysecondary{
 a.mysecondary:hover{
 	background-color: var(--color-electric-lime-800);
 	color: var(--color-electric-lime-400);
+}
+
+header.bg-transparent {
+  /* Ensure a smooth transition for background and padding */
+  transition: background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+/* When the 'scrolled' class is added via JS */
+header.bg-transparent.scrolled {
+  background-color: var(--color-nav-scrolled);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  padding-top: 0.5rem; /* Optional: shrink the nav slightly on scroll */
+  padding-bottom: 0.5rem;
 }

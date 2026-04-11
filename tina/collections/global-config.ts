@@ -39,6 +39,46 @@ export const GlobalConfigCollection: Collection = {
         // Add more settings here...
       ],
     },
+    // tina/collections/global-config.ts
+{
+  name: "navigationSettings",
+  label: "Navigation Styles & Layout",
+  type: "object",
+  fields: [
+    { name: "logo", label: "Site Logo", type: "image" },
+    {
+      name: "navPosition",
+      label: "Menu Alignment",
+      type: "string",
+      options: [
+        { label: "Left (Next to Logo)", value: "justify-start" },
+        { label: "Right (Next to Socials)", value: "justify-end" },
+        { label: "Center", value: "justify-center" },
+      ],
+    },
+    {
+      name: "backgroundStyle",
+      label: "Background Color",
+      type: "string",
+      options: [
+        { label: "White", value: "bg-white text-gray-800" },
+        { label: "Light", value: "mylight text-gray-800" },
+        { label: "Dark", value: "mydark text-white" },
+        { label: "Transparent", value: "bg-transparent" },
+      ],
+    },
+    {
+      name: "sticky",
+      label: "Navigation Behavior",
+      type: "string",
+      options: [
+        { label: "Relative (Scrolls away)", value: "relative" },
+        { label: "Fixed (Stays at top)", value: "fixed top-0 left-0 w-full z-50" },
+      ],
+    },
+  ],
+},
+
     {
       name: "nav",
       label: "Site Navigation Menu (Reorder, Add, Remove)",

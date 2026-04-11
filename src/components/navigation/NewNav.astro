@@ -3,35 +3,94 @@
 import SimpleLink from './nav/SimpleLink.astro';
 import Dropdown from './nav/Dropdown.astro';
 import MegaMenu from './nav/MegaMenu.astro';
+import IconLink from "../react/IconLink";
 
 
 
-const { navData } = Astro.props;
+// src/components/navigation/NewNav.astro
+const { navData, socialData, styles } = Astro.props;
+
+// Fallbacks for when no option is selected
+const bgClass = styles?.backgroundStyle || "bg-white";
+const positionClass = styles?.sticky || "relative";
+const alignmentClass = styles?.navPosition || "justify-start";
 ---
 <style>
   nav {
     display: flex;
     gap: 1.5rem;
-    background: red;
+  
+  }
+
+ 
+
+  .mynavwrapper{
+    .container{
+
+        img{
+            max-width:60px;
+        }
+    }
   }
 </style>
 
-<nav class="">
-    
-  {navData?.map((item: any) => {
-    switch (item.__typename) {
-      case 'ConfigNavSimpleLink': // Matches your console log
-        return <SimpleLink {...item} />;
-        
-      case 'ConfigNavDropdown':   // Matches your console log
-        return <Dropdown {...item} />;
-        
-      case 'ConfigNavMegaMenu':   // Matches your console log
-        return <MegaMenu {...item} />;
-        
-      default:
-        return null;
-    }
-  })}
-</nav>
 
+
+
+<header class={`${positionClass} ${bgClass} transition-all duration-300 w-full mynavwrapper`}>
+  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+    
+    <!-- 1. LOGO AREA (Far Left) -->
+    <div class="flex-shrink-0">
+      {styles?.logo ? (
+        <img src={styles.logo} alt="Logo" class="h-10 w-auto" />
+      ) : (
+        <span class="font-bold text-xl uppercase tracking-tighter">LighterDay</span>
+      )}
+    </div>
+
+    <!-- 2. MENU AREA (Dynamic Alignment) -->
+    <!-- flex-grow pushes items, while alignmentClass handles internal spacing -->
+    <!-- 2. MENU AREA -->
+    <div class={`hidden md:flex flex-grow px-8 ${alignmentClass}`}>
+      <nav class="flex gap-6">
+        {navData?.map((item: any) => { // Changed ( to {
+            switch (item.__typename) {
+              case 'ConfigNavSimpleLink':
+                return <SimpleLink {...item} />;
+                
+              case 'ConfigNavDropdown':
+                return <Dropdown {...item} />;
+                
+              case 'ConfigNavMegaMenu':
+                return <MegaMenu {...item} />;
+                
+              default:
+                return null;
+            }
+        })} <!-- Changed ) to } -->
+      </nav>
+    </div>
+
+
+    <!-- 3. SOCIALS (Far Right) -->
+    <div class="flex items-center gap-4 flex-shrink-0">
+      {socialData?.map((item: any) => (
+        <IconLink {...item} />
+      ))}
+    </div>
+
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector('header.bg-transparent') as HTMLElement | null;
+  
+  window.addEventListener('scroll', () => {
+    if (header && window.scrollY > 50) {
+      header.classList.add('scrolled');
+    } else if (header) {
+      header.classList.remove('scrolled');
+    }
+  });
+</script>

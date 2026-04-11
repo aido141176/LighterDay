@@ -2,21 +2,27 @@
 import "../styles/global.css";
 import NewNav from "../components/navigation/NewNav.astro";
 import Footer from "../components/ui/Footer.astro";
-import { Font } from 'astro:assets';
-import config from "../content/config/config.json";
-
 import { client } from '../../tina/__generated__/client';
 
+// 1. Fetch Global Config (Nav, Social, Global SEO)
 const response = await client.queries.config({ relativePath: 'config.json' });
-// Double check this path! Is it global.nav or global.navigation?
-const navItems = response.data.config.nav;
-console.log("NAV ITEMS:", navItems); 
-const {
-  title = config.seo.title || "My Site",
-  description = "Default description",
-  image = "/images/og.jpg",
-  url = "https://example.com"
-} = Astro.props;
+const siteSettings = response.data.config;
+const navItems = siteSettings.nav;
+const socialLinks = siteSettings.contactLinks;
+const navStyles = siteSettings.navigationSettings; // Our new settings object
+// 2. Fetch Page Data based on URL
+const { slug } = Astro.params;
+const path = slug ? `${slug}.md` : 'home.mdx';
+const pageresponse = await client.queries.page({ relativePath: path });
+const pageContent = pageresponse.data.page;
+
+// 3. SEO Logic (Using the variables we just created above)
+const metaTitle = pageContent.seo?.title || siteSettings.seo?.title || "LighterDay";
+const metaDescription = pageContent.seo?.description || siteSettings.seo?.description || "Default Description";
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || "https://example.com");
+const shareImage = pageContent.seo?.image || siteSettings.seo?.image || "/images/og.jpg";
+
+
 ---
 
 <html lang="en">
@@ -24,55 +30,34 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
 
-    <!-- Primary SEO -->
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={url} />
+    <title>{metaTitle}</title>
+    <meta name="description" content={metaDescription} />
+    <link rel="canonical" href={canonicalURL} />
 
-    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={url} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
+    <!-- Open Graph -->
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={metaTitle} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:image" content={shareImage} />
 
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
+    <meta name="twitter:title" content={metaTitle} />
+    <meta name="twitter:image" content={shareImage} />
 
-    <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" />
-
-
-    <script type="application/ld+json">
-      {JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "LocalBusiness",
-        "name": "Your Business Name",
-        "url": url,
-        "description": description
-      })}
-      </script>
-        <Font cssVariable="--font-poppins" preload />
-        <Font cssVariable="--font-merriweather" preload />
   </head>
 
-  <body class="text-gray-800 bg-white hello">
-
-  <NewNav navData={navItems} /> 
-
-
-   
-
-     <div>
-  <slot />
-</div>
-
-
+  <body>
+   <NewNav 
+      navData={navItems} 
+      socialData={socialLinks} 
+      styles={navStyles} 
+    />
+    
+    <main>
+      <slot />
+    </main>
 
     <Footer />
-
   </body>
 </html>

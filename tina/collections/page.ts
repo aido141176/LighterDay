@@ -9,12 +9,30 @@ export const PageCollection: Collection = {
   path: "src/content/page",
   format: "mdx",
   fields: [
-    {
-      name: "seoTitle",
-      label: "SEO Title",
+{
+  type: "object",
+  name: "seo",
+  label: "SEO Settings",
+  fields: [
+    { 
+      name: "title", 
+      label: "Meta Title", 
       type: "string",
-      required: true,
+      description: "Overrides the page title for search results" 
     },
+    { 
+      name: "description", 
+      label: "Meta Description", 
+      type: "string", 
+      ui: { component: "textarea" } 
+    },
+    { 
+      name: "image", 
+      label: "Social Share Image", 
+      type: "image" 
+    },
+  ],
+},
     
     {
       name: "blocks",

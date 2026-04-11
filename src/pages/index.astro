@@ -9,7 +9,7 @@ import PageRenderer from "../../tina/pages/PageRenderer.tsx";
 const data = await client.queries.page({relativePath: "home.mdx"});
 import "../styles/global.css";
 ---
-<BaseLayout>
+<BaseLayout >
 
 		<PageRenderer {...data} client:tina />
 	
