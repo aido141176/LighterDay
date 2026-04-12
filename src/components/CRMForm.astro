@@ -1,8 +1,94 @@
-<form method="post" action="https://systeme.io/embedded/39901787/subscription"> <input type=text name=surname />
-<input type=text name=email />
-<input type=text name=first_name />
-  <div class="f-row">
-    <button type="submit" class="btn">Subscribe</button>
-  </div>
+
+<section class="max-w-md mx-auto p-6 bg-white rounded-xl shadow-md border border-gray-100">
+  <form 
+    id="sub-form" 
+    method="POST" 
+    action="https://systeme.io/embedded/39901787/subscription"
+  >
+    <div class="space-y-4">
+      <!-- First Name -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">First Name</label>
+        <input 
+          type="text" 
+          name="first_name" 
+          required 
+          class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+        />
+      </div>
+
+      <!-- Surname -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Surname</label>
+        <input 
+          type="text" 
+          name="surname" 
+          required 
+          class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+        />
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Email Address</label>
+        <input 
+          type="email" 
+          name="email" 
+          required 
+          class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+        />
+      </div>
+
+      <button 
+        type="submit" 
+        class="w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-colors duration-200"
+      >
+        Subscribe Now
+      </button>
+    </div>
   </form>
-  
+
+  <!-- Success Message (Hidden by default) -->
+  <div id="success-msg" class="hidden text-center py-8">
+    <div class="inline-flex items-center justify-center w-12 h-12 mb-4 bg-green-100 rounded-full">
+      <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+    </div>
+    <h3 class="text-lg font-bold text-gray-900">Message Sent!</h3>
+    <p class="text-sm text-gray-500">Thank you for subscribing.</p>
+  </div>
+</section>
+
+<script>
+  // 1. Tell TypeScript these are specific HTML elements, not just generic ones
+  const form = document.getElementById('sub-form') as HTMLFormElement | null;
+  const successMsg = document.getElementById('success-msg') as HTMLElement | null;
+
+  // 2. Check if the elements exist before adding listeners
+  if (form && successMsg) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      try {
+        // Now 'form.action' works because we cast it to HTMLFormElement
+        await fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          mode: 'no-cors'
+        });
+
+        form.classList.add('hidden');
+        successMsg.classList.remove('hidden');
+
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Something went wrong. Please try again.');
+      }
+    });
+  }
+</script>
+
+
