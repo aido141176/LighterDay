@@ -6,6 +6,7 @@ import Footer from '../components/Footer.astro';
 import config from '../content/config/config.json';
 import DataFlow from "../components/DataFlow.astro";
 import CRM from "../components/CRMForm.astro";
+import CRMBooking from "../components/CRMBooking.astro";
 import client from '../../tina/__generated__/client';
 import PageRenderer from "../../tina/pages/PageRenderer.tsx";
 const data = await client.queries.page({relativePath: "about.mdx"});
@@ -17,5 +18,7 @@ import "../styles/global.css";
 		<PageRenderer {...data} client:tina />
 		<DataFlow/>
 		<CRM/>
+		<CRMBooking/>
+
 
 </BaseLayout>

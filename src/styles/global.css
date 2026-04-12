@@ -298,3 +298,13 @@ header.bg-transparent.scrolled {
   padding-top: 0.5rem; /* Optional: shrink the nav slightly on scroll */
   padding-bottom: 0.5rem;
 }
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Hide for Chrome, Safari, Opera */
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* Hide for IE and Edge */
+    scrollbar-width: none;  /* Hide for Firefox */
+  }
+}
