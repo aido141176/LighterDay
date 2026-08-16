@@ -1,4 +1,5 @@
 import { tinaField } from "tinacms/dist/react";
+import { sectionClasses } from "./sectionUtils";
 
 type Props = {
   block: any;
@@ -10,16 +11,8 @@ export default function BlogSection({ block, posts }: Props) {
   const columns = block?.columns ?? "3";
   const buttonText = block?.buttonText ?? "See all posts";
   const buttonLink = block?.buttonLink ?? "/blog";
-  const sectionBackground = block?.sectionBackground ?? "white";
-
-  const sectionBackgroundClass =
-    sectionBackground === "light"
-      ? "mylight"
-      : sectionBackground === "dark"
-      ? "mydark"
-      : sectionBackground === "primary"
-      ? "myprimary"
-      : "bg-white";
+  const { sectionBackgroundClass, textAlignClass, paddingClass, maxWidthClass, isDark } =
+    sectionClasses(block);
 
   const sortedPosts = [...(posts ?? [])].sort(
     (a: any, b: any) =>
@@ -33,22 +26,12 @@ export default function BlogSection({ block, posts }: Props) {
       ? "md:grid-cols-2 lg:grid-cols-4"
       : "md:grid-cols-3";
 
-  const textColorClass =
-    sectionBackground === "dark" || sectionBackground === "primary"
-      ? "text-slate-100"
-      : "text-slate-900";
-
-  const subtextColorClass =
-    sectionBackground === "dark" || sectionBackground === "primary"
-      ? "text-slate-300"
-      : "text-slate-600";
-
   return (
-    <section className={`blog-section py-16 ${sectionBackgroundClass}`}>
-      <div className="mx-auto max-w-6xl px-4">
+    <section className={`blog-section ${paddingClass} ${sectionBackgroundClass} ${textAlignClass}`}>
+      <div className={`mx-auto w-full px-4 ${maxWidthClass}`}>
         {heading && (
           <h2
-            className="mb-10 text-center text-3xl font-bold tracking-tight"
+            className="mb-10 text-3xl font-bold tracking-tight"
             data-tina-field={tinaField(block, "heading")}
           >
             {heading}
@@ -72,16 +55,16 @@ export default function BlogSection({ block, posts }: Props) {
                     />
                   )}
                   <div className="p-5">
-                    <h3 className={`text-lg font-semibold ${textColorClass}`}>
+                    <h3 className={`text-lg font-semibold ${isDark ? "text-slate-100" : "text-slate-900"}`}>
                       {post?.title}
                     </h3>
                     {post?.pubDate && (
-                      <p className={`mt-1 text-sm ${subtextColorClass}`}>
+                      <p className={`mt-1 text-sm ${isDark ? "text-slate-300" : "text-slate-600"}`}>
                         {new Date(post.pubDate).toLocaleDateString()}
                       </p>
                     )}
                     {post?.description && (
-                      <p className={`mt-2 text-sm leading-6 ${subtextColorClass}`}>
+                      <p className={`mt-2 text-sm leading-6 ${isDark ? "text-slate-300" : "text-slate-600"}`}>
                         {post.description}
                       </p>
                     )}

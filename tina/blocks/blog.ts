@@ -1,11 +1,14 @@
 import type { Template } from "tinacms";
-import { sectionBackgroundField } from "../fields";
+import { sectionBackgroundField, textAlignField, paddingField, maxWidthField } from "../fields";
 
 export const blogBlock: Template = {
   name: "blog",
   label: "Blog",
   fields: [
     sectionBackgroundField,
+    textAlignField,
+    paddingField,
+    maxWidthField,
     {
       type: "string",
       name: "heading",

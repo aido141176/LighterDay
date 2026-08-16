@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { tinaField } from "tinacms/dist/react";
+import { sectionClasses } from "./sectionUtils";
 
 type Props = {
   block: any;
@@ -9,6 +10,8 @@ export default function HeroCarousel({ block }: Props) {
   const items = block?.items ?? [];
   const height = block?.height ?? "large";
   const [current, setCurrent] = useState(0);
+
+  const { textAlignClass, paddingClass, maxWidthClass } = sectionClasses(block);
 
   const total = items.length;
 
@@ -34,8 +37,6 @@ export default function HeroCarousel({ block }: Props) {
     return null;
   }
 
-  const active = items[current];
-
   return (
     <section className={`hero-carousel-section relative ${carouselHeight} overflow-hidden bg-slate-900`}>
       <div className="absolute inset-0">
@@ -53,23 +54,27 @@ export default function HeroCarousel({ block }: Props) {
               ></div>
             )}
             <div className="absolute inset-0 bg-black/40"></div>
-            <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center text-white">
-              {item?.title && (
-                <h2
-                  className="max-w-4xl text-4xl font-extrabold tracking-tight md:text-6xl"
-                  data-tina-field={tinaField(item, "title")}
-                >
-                  {item.title}
-                </h2>
-              )}
-              {item?.caption && (
-                <p
-                  className="mt-6 max-w-2xl text-lg leading-8 text-white/90"
-                  data-tina-field={tinaField(item, "caption")}
-                >
-                  {item.caption}
-                </p>
-              )}
+            <div
+              className={`relative z-10 flex h-full w-full flex-col items-center justify-center px-6 ${paddingClass} text-white ${textAlignClass}`}
+            >
+              <div className={`mx-auto w-full ${maxWidthClass}`}>
+                {item?.title && (
+                  <h2
+                    className="text-4xl font-extrabold tracking-tight md:text-6xl"
+                    data-tina-field={tinaField(item, "title")}
+                  >
+                    {item.title}
+                  </h2>
+                )}
+                {item?.caption && (
+                  <p
+                    className="mt-6 text-lg leading-8 text-white/90"
+                    data-tina-field={tinaField(item, "caption")}
+                  >
+                    {item.caption}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         ))}

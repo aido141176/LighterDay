@@ -13,6 +13,15 @@ import TextWithImage from "../components/TextWithImage";
 import HeroCarousel from "../components/HeroCarousel";
 import Contact from "../components/Contact";
 import ContactForm from "../components/ContactForm";
+import Stats from "../components/Stats";
+import Logos from "../components/Logos";
+import Pricing from "../components/Pricing";
+import VideoEmbed from "../components/VideoEmbed";
+import MapEmbed from "../components/MapEmbed";
+import Steps from "../components/Steps";
+import CustomHtml from "../components/CustomHtml";
+import HeroBasic from "../components/HeroBasic";
+import HeroSplit from "../components/HeroSplit";
 
 type Props = {
   page: any;
@@ -123,6 +132,69 @@ export default function Page({ page, posts = [] }: Props) {
                 return (
                   <div key={index} data-tina-field={tinaField(page, "blocks")}>
                     <ContactForm block={block} />
+                  </div>
+                );
+
+              case "PageBlocksStats":
+                return (
+                  <div key={index} data-tina-field={tinaField(page, "blocks")}>
+                    <Stats block={block} />
+                  </div>
+                );
+
+              case "PageBlocksLogos":
+                return (
+                  <div key={index} data-tina-field={tinaField(page, "blocks")}>
+                    <Logos block={block} />
+                  </div>
+                );
+
+              case "PageBlocksPricing":
+                return (
+                  <div key={index} data-tina-field={tinaField(page, "blocks")}>
+                    <Pricing block={block} />
+                  </div>
+                );
+
+              case "PageBlocksVideoEmbed":
+                return (
+                  <div key={index} data-tina-field={tinaField(page, "blocks")}>
+                    <VideoEmbed block={block} />
+                  </div>
+                );
+
+              case "PageBlocksMapEmbed":
+                return (
+                  <div key={index} data-tina-field={tinaField(page, "blocks")}>
+                    <MapEmbed block={block} />
+                  </div>
+                );
+
+              case "PageBlocksSteps":
+                return (
+                  <div key={index} data-tina-field={tinaField(page, "blocks")}>
+                    <Steps block={block} />
+                  </div>
+                );
+
+              case "PageBlocksCustomHtml":
+                return (
+                  <div key={index} data-tina-field={tinaField(page, "blocks")}>
+                    <CustomHtml block={block} />
+                  </div>
+                );
+
+              case "PageBlocksHeroBasic":
+                return (
+                  <div key={index} data-tina-field={tinaField(page, "blocks")}>
+                    <HeroBasic block={block} />
+                  </div>
+                );
+
+              case "PageBlocksHeroSplit":
+                return (
+                  <div key={index} data-tina-field={tinaField(page, "blocks")}>
+                    <HeroSplit block={block} />
                   </div>
                 );
 

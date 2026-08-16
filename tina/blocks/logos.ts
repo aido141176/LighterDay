@@ -1,9 +1,9 @@
 import type { Template } from "tinacms";
 import { sectionBackgroundField, textAlignField, paddingField, maxWidthField } from "../fields";
 
-export const galleryBlock: Template = {
-  name: "gallery",
-  label: "Gallery",
+export const logosBlock: Template = {
+  name: "logos",
+  label: "Logos",
   fields: [
     sectionBackgroundField,
     textAlignField,
@@ -13,13 +13,13 @@ export const galleryBlock: Template = {
       type: "string",
       name: "heading",
       label: "Heading",
-      description: "Section title displayed above the gallery.",
+      description: "Section title displayed above the logos, e.g. 'Trusted by'.",
     },
     {
       type: "image",
-      name: "images",
-      label: "Images",
-      description: "Upload images to display in the gallery.",
+      name: "logos",
+      label: "Logos",
+      description: "Upload client or partner logos to display in a row.",
       list: true,
     },
   ],

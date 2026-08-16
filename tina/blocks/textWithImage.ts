@@ -1,11 +1,14 @@
 import type { Template } from "tinacms";
-import { sectionBackgroundField } from "../fields";
+import { sectionBackgroundField, textAlignField, paddingField, maxWidthField } from "../fields";
 
 export const textWithImageBlock: Template = {
   name: "textWithImage",
   label: "Text with Image",
   fields: [
     sectionBackgroundField,
+    textAlignField,
+    paddingField,
+    maxWidthField,
     {
       type: "string",
       name: "heading",

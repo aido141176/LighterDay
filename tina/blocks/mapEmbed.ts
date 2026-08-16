@@ -1,9 +1,9 @@
 import type { Template } from "tinacms";
 import { sectionBackgroundField, textAlignField, paddingField, maxWidthField } from "../fields";
 
-export const galleryBlock: Template = {
-  name: "gallery",
-  label: "Gallery",
+export const mapEmbedBlock: Template = {
+  name: "mapEmbed",
+  label: "Map Embed",
   fields: [
     sectionBackgroundField,
     textAlignField,
@@ -13,14 +13,14 @@ export const galleryBlock: Template = {
       type: "string",
       name: "heading",
       label: "Heading",
-      description: "Section title displayed above the gallery.",
+      description: "Section title displayed above the map.",
     },
     {
-      type: "image",
-      name: "images",
-      label: "Images",
-      description: "Upload images to display in the gallery.",
-      list: true,
+      type: "string",
+      name: "mapUrl",
+      label: "Map URL",
+      description:
+        "Google Maps embed URL. Use Share > Embed a map, or a /maps/embed?pb=... URL.",
     },
   ],
 };

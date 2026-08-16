@@ -1,5 +1,5 @@
 import type { Template } from "tinacms";
-import { sectionBackgroundField } from "../fields";
+import { sectionBackgroundField, paddingField, maxWidthField } from "../fields";
 
 export const ctaBlock: Template = {
   name: "cta",

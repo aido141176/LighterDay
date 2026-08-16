@@ -33,11 +33,14 @@ tina/
   blocks/                   # ONE FILE PER PAGE-BUILDER SECTION (schema only)
     hero.ts, cta.ts, cardGrid.ts, team.ts, testimonial.ts, services.ts,
     gallery.ts, faq.ts, blog.ts, fullText.ts, textWithImage.ts,
-    heroCarousel.ts, contact.ts, contactForm.ts
+    heroCarousel.ts, contact.ts, contactForm.ts, stats.ts, logos.ts,
+    pricing.ts, videoEmbed.ts, mapEmbed.ts, steps.ts, customHtml.ts,
+    heroBasic.ts, heroSplit.ts
     index.ts                # re-exports every block
-  fields/                   # shared reusable fields (e.g. sectionBackgroundField)
+  fields/                   # shared reusable fields: sectionBackgroundField (background.ts),
+                            # textAlignField/paddingField/maxWidthField (design.ts)
   components/               # React TSX renderers, ONE PER BLOCK (block prop)
-    Hero.tsx, CTA.tsx, Team.tsx, ...
+    Hero.tsx, CTA.tsx, Team.tsx, ..., sectionUtils.ts (sectionClasses util)
   pages/
     PageRenderer.tsx        # client component: useTina() + renders <Page>
     Page.tsx                # block dispatcher: switch on __typename
@@ -115,6 +118,7 @@ Do NOT inline templates in `page.ts` and do NOT write `.astro` renderers for blo
 - `__typename` pattern: `PageBlocks` + PascalCase template `name` (e.g. `name: "textWithImage"` → `PageBlocksTextWithImage`).
 - Rich text fields are `type: "rich-text"` in the schema and rendered with `<TinaMarkdown content={block.body} />` from `tinacms/dist/rich-text` (see `tina/pages/AdminBlogPost.tsx`).
 - Every section component supports `sectionBackgroundField` (white/light/dark) via the shared `mylight`/`mydark`/`myprimary` class map — copy the `sectionBackgroundClass` pattern from `CTA.tsx`.
+- **Shared design fields:** every block gets `textAlignField`/`paddingField`/`maxWidthField` from `tina/fields/design.ts` (except where the block already has its own `textAlign`). Components resolve them via `sectionClasses(block)` in `tina/components/sectionUtils.ts` — always use that util, never hardcode `py-16`/`max-w-6xl`/`text-center`.
 - Object lists get `ui.itemProps` for readable labels in the CMS sidebar.
 - Components consume a single `block` prop; data not in the page query (e.g. blog posts) is threaded from `getStaticPaths` → `PageRenderer` → `Page` → the section component (see the Blog section).
 - Components are typed loosely (`any`) throughout this repo; match that rather than introducing strict types.
@@ -124,9 +128,14 @@ Do NOT inline templates in `page.ts` and do NOT write `.astro` renderers for blo
 
 ## Current Section Inventory
 
+All sections except `hero`/`heroCarousel` (media-based) share the same design fields: `sectionBackgroundField`, `textAlignField`, `paddingField`, `maxWidthField` (from `tina/fields/`). The `hero`/`cta` blocks have their own `textAlign`; `customHtml` omits `sectionBackground`.
+
 | Block name      | `__typename`              | Purpose |
 |-----------------|---------------------------|---------|
-| hero            | `PageBlocksHero`          | Full-width hero: media (image/video), overlay, alignment, height |
+| hero            | `PageBlocksHero`          | Full-width media hero: image/video, overlay, alignment, height |
+| heroBasic       | `PageBlocksHeroBasic`     | Centered text hero: headline, subtext, button (no media) |
+| heroSplit       | `PageBlocksHeroSplit`     | 50/50 hero: text left, image right |
+| heroCarousel    | `PageBlocksHeroCarousel`  | Full-width image carousel: title, image, caption per slide |
 | cta             | `PageBlocksCta`           | Call-to-action banner with headline/button |
 | cardGridSection | `PageBlocksCardGridSection` | Configurable card grid (columns, styles, hover) |
 | team            | `PageBlocksTeam`          | Member grid: name, role, avatar |
@@ -136,8 +145,14 @@ Do NOT inline templates in `page.ts` and do NOT write `.astro` renderers for blo
 | faq             | `PageBlocksFaq`           | Accordion: question/answer items |
 | blog            | `PageBlocksBlog`          | Recent posts grid (2/3/4 cols) + "See all posts" link; posts threaded via props |
 | fullText        | `PageBlocksFullText`      | Full-width rich-text block |
-| textWithImage   | `PageBlocksTextWithImage` | 50/50 image + rich-text rows |
-| heroCarousel    | `PageBlocksHeroCarousel`  | Full-width image carousel: title, image, caption |
+| textWithImage   | `PageBlocksTextWithImage` | 50/50 image + rich-text rows, image side configurable |
+| stats           | `PageBlocksStats`         | Numbers grid: value + label per item |
+| logos           | `PageBlocksLogos`         | Client/partner logo strip (image list) |
+| pricing         | `PageBlocksPricing`       | 3-column plan cards: name, price, features, CTA, featured flag |
+| videoEmbed      | `PageBlocksVideoEmbed`    | YouTube/Vimeo embed from a plain URL |
+| mapEmbed        | `PageBlocksMapEmbed`      | Google Maps embed iframe |
+| steps           | `PageBlocksSteps`         | Numbered steps/timeline: title + description |
+| customHtml      | `PageBlocksCustomHtml`    | Raw HTML rendered as-is (escape hatch) |
 | contact         | `PageBlocksContact`       | Rich text + address, office hours, phone |
 | contactForm     | `PageBlocksContactForm`   | Title, textarea text, recipient email + static form markup |
 

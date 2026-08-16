@@ -1,11 +1,14 @@
 import type { Template } from "tinacms";
-import { sectionBackgroundField } from "../fields";
+import { sectionBackgroundField, textAlignField, paddingField, maxWidthField } from "../fields";
 
 export const contactFormBlock: Template = {
   name: "contactForm",
   label: "Contact Form",
   fields: [
     sectionBackgroundField,
+    textAlignField,
+    paddingField,
+    maxWidthField,
     {
       type: "string",
       name: "title",

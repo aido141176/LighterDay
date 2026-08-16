@@ -1,5 +1,5 @@
 import type { Template } from "tinacms";
-import { sectionBackgroundField } from "../fields";
+import { sectionBackgroundField, textAlignField, paddingField, maxWidthField } from "../fields";
 
 export const cardGridBlock: Template = {
   name: "cardGridSection",
@@ -34,6 +34,9 @@ export const cardGridBlock: Template = {
         component: "radio-group",
       },
     },
+    textAlignField,
+    paddingField,
+    maxWidthField,
     sectionBackgroundField,
     {
       type: "string",

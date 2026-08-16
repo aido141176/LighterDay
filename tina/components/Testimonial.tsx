@@ -1,4 +1,5 @@
 import { tinaField } from "tinacms/dist/react";
+import { sectionClasses } from "./sectionUtils";
 
 type Props = {
   block: any;
@@ -7,38 +8,19 @@ type Props = {
 export default function Testimonial({ block }: Props) {
   const heading = block?.heading ?? "";
   const quotes = block?.quotes ?? [];
-  const sectionBackground = block?.sectionBackground ?? "white";
+  const { sectionBackgroundClass, textAlignClass, paddingClass, maxWidthClass, isDark } =
+    sectionClasses(block);
 
-  const sectionBackgroundClass =
-    sectionBackground === "light"
-      ? "mylight"
-      : sectionBackground === "dark"
-      ? "mydark"
-      : sectionBackground === "primary"
-      ? "myprimary"
-      : "bg-white";
-
-  const cardClass =
-    sectionBackground === "dark" || sectionBackground === "primary"
-      ? "bg-transparent border border-white/20"
-      : "bg-white border border-slate-200 shadow-sm";
-
-  const textColorClass =
-    sectionBackground === "dark" || sectionBackground === "primary"
-      ? "text-slate-100"
-      : "text-slate-900";
-
-  const subtextColorClass =
-    sectionBackground === "dark" || sectionBackground === "primary"
-      ? "text-slate-300"
-      : "text-slate-600";
+  const cardClass = isDark
+    ? "bg-transparent border border-white/20"
+    : "bg-white border border-slate-200 shadow-sm";
 
   return (
-    <section className={`testimonial-section py-16 ${sectionBackgroundClass}`}>
-      <div className="mx-auto max-w-6xl px-4">
+    <section className={`testimonial-section ${paddingClass} ${sectionBackgroundClass} ${textAlignClass}`}>
+      <div className={`mx-auto w-full px-4 ${maxWidthClass}`}>
         {heading && (
           <h2
-            className="mb-10 text-center text-3xl font-bold tracking-tight"
+            className="mb-10 text-3xl font-bold tracking-tight"
             data-tina-field={tinaField(block, "heading")}
           >
             {heading}
@@ -47,14 +29,17 @@ export default function Testimonial({ block }: Props) {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {quotes.map((quote: any, idx: number) => (
-            <figure key={idx} className={`testimonial-card flex flex-col justify-between rounded-xl p-6 ${cardClass}`}>
+            <figure
+              key={idx}
+              className={`testimonial-card flex flex-col justify-between rounded-xl p-6 ${cardClass}`}
+            >
               <blockquote
-                className={`flex-1 text-lg leading-8 ${textColorClass}`}
+                className={`flex-1 text-lg leading-8 ${isDark ? "text-slate-100" : "text-slate-900"}`}
                 data-tina-field={tinaField(quote, "quote")}
               >
                 &ldquo;{quote.quote}&rdquo;
               </blockquote>
-              <figcaption className={`mt-4 text-sm ${subtextColorClass}`}>
+              <figcaption className={`mt-4 text-sm ${isDark ? "text-slate-300" : "text-slate-600"}`}>
                 <span className="block font-semibold" data-tina-field={tinaField(quote, "author")}>
                   {quote.author}
                 </span>

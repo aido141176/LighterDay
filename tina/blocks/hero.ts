@@ -1,4 +1,5 @@
 import type { Template } from "tinacms";
+import { paddingField, maxWidthField } from "../fields";
 
 
 export const heroBlock: Template = {

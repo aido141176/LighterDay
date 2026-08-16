@@ -14,6 +14,15 @@ import {
   heroCarouselBlock,
   contactBlock,
   contactFormBlock,
+  statsBlock,
+  logosBlock,
+  pricingBlock,
+  videoEmbedBlock,
+  mapEmbedBlock,
+  stepsBlock,
+  customHtmlBlock,
+  heroBasicBlock,
+  heroSplitBlock,
 } from "../blocks";
 
 //import { sectionBackgroundField } from "../fields";
@@ -54,7 +63,7 @@ export const PageCollection: Collection = {
       label: "Page Sections",
       type: "object",
       list: true,
-      templates: [heroBlock, ctaBlock, cardGridBlock, teamBlock, testimonialBlock, servicesBlock, galleryBlock, faqBlock, blogBlock, fullTextBlock, textWithImageBlock, heroCarouselBlock, contactBlock, contactFormBlock]
+      templates: [heroBlock, ctaBlock, cardGridBlock, teamBlock, testimonialBlock, servicesBlock, galleryBlock, faqBlock, blogBlock, fullTextBlock, textWithImageBlock, heroCarouselBlock, contactBlock, contactFormBlock, statsBlock, logosBlock, pricingBlock, videoEmbedBlock, mapEmbedBlock, stepsBlock, customHtmlBlock, heroBasicBlock, heroSplitBlock]
     },
   ],
 };

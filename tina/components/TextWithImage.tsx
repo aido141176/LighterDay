@@ -1,5 +1,6 @@
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
+import { sectionClasses } from "./sectionUtils";
 
 type Props = {
   block: any;
@@ -9,33 +10,15 @@ export default function TextWithImage({ block }: Props) {
   const heading = block?.heading ?? "";
   const imageSide = block?.imageSide ?? "left";
   const items = block?.items ?? [];
-  const sectionBackground = block?.sectionBackground ?? "white";
-
-  const sectionBackgroundClass =
-    sectionBackground === "light"
-      ? "mylight"
-      : sectionBackground === "dark"
-      ? "mydark"
-      : sectionBackground === "primary"
-      ? "myprimary"
-      : "bg-white";
-
-  const textColorClass =
-    sectionBackground === "dark" || sectionBackground === "primary"
-      ? "text-slate-100"
-      : "text-slate-900";
-
-  const subtextColorClass =
-    sectionBackground === "dark" || sectionBackground === "primary"
-      ? "text-slate-300"
-      : "text-slate-600";
+  const { sectionBackgroundClass, textAlignClass, paddingClass, maxWidthClass, isDark } =
+    sectionClasses(block);
 
   return (
-    <section className={`text-with-image-section py-16 ${sectionBackgroundClass}`}>
-      <div className="mx-auto max-w-6xl px-4">
+    <section className={`text-with-image-section ${paddingClass} ${sectionBackgroundClass} ${textAlignClass}`}>
+      <div className={`mx-auto w-full px-4 ${maxWidthClass}`}>
         {heading && (
           <h2
-            className="mb-10 text-center text-3xl font-bold tracking-tight"
+            className="mb-10 text-3xl font-bold tracking-tight"
             data-tina-field={tinaField(block, "heading")}
           >
             {heading}
@@ -48,11 +31,7 @@ export default function TextWithImage({ block }: Props) {
               imageSide === "alternate" ? idx % 2 === 0 : imageSide === "left";
             return (
               <div key={idx} className="grid items-center gap-8 md:grid-cols-2">
-                <div
-                  className={`${
-                    isImageLeft ? "md:order-1" : "md:order-2"
-                  }`}
-                >
+                <div className={isImageLeft ? "md:order-1" : "md:order-2"}>
                   {item?.image && (
                     <img
                       src={item.image}
@@ -62,13 +41,9 @@ export default function TextWithImage({ block }: Props) {
                     />
                   )}
                 </div>
-                <div
-                  className={`${
-                    isImageLeft ? "md:order-2" : "md:order-1"
-                  }`}
-                >
+                <div className={isImageLeft ? "md:order-2" : "md:order-1"}>
                   <div
-                    className={`leading-8 ${subtextColorClass}`}
+                    className={`leading-8 ${isDark ? "text-slate-300" : "text-slate-600"}`}
                     data-tina-field={tinaField(item, "body")}
                   >
                     <TinaMarkdown content={item?.body} />

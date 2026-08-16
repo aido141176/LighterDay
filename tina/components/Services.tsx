@@ -1,4 +1,5 @@
 import { tinaField } from "tinacms/dist/react";
+import { sectionClasses } from "./sectionUtils";
 
 type Props = {
   block: any;
@@ -7,38 +8,19 @@ type Props = {
 export default function Services({ block }: Props) {
   const heading = block?.heading ?? "";
   const items = block?.items ?? [];
-  const sectionBackground = block?.sectionBackground ?? "white";
+  const { sectionBackgroundClass, textAlignClass, paddingClass, maxWidthClass, isDark } =
+    sectionClasses(block);
 
-  const sectionBackgroundClass =
-    sectionBackground === "light"
-      ? "mylight"
-      : sectionBackground === "dark"
-      ? "mydark"
-      : sectionBackground === "primary"
-      ? "myprimary"
-      : "bg-white";
-
-  const cardClass =
-    sectionBackground === "dark" || sectionBackground === "primary"
-      ? "bg-transparent border border-white/20"
-      : "bg-white border border-slate-200 shadow-sm";
-
-  const textColorClass =
-    sectionBackground === "dark" || sectionBackground === "primary"
-      ? "text-slate-100"
-      : "text-slate-900";
-
-  const subtextColorClass =
-    sectionBackground === "dark" || sectionBackground === "primary"
-      ? "text-slate-300"
-      : "text-slate-600";
+  const cardClass = isDark
+    ? "bg-transparent border border-white/20"
+    : "bg-white border border-slate-200 shadow-sm";
 
   return (
-    <section className={`services-section py-16 ${sectionBackgroundClass}`}>
-      <div className="mx-auto max-w-6xl px-4">
+    <section className={`services-section ${paddingClass} ${sectionBackgroundClass} ${textAlignClass}`}>
+      <div className={`mx-auto w-full px-4 ${maxWidthClass}`}>
         {heading && (
           <h2
-            className="mb-10 text-center text-3xl font-bold tracking-tight"
+            className="mb-10 text-3xl font-bold tracking-tight"
             data-tina-field={tinaField(block, "heading")}
           >
             {heading}
@@ -57,13 +39,13 @@ export default function Services({ block }: Props) {
                 </span>
               )}
               <h3
-                className={`text-xl font-semibold ${textColorClass}`}
+                className={`text-xl font-semibold ${isDark ? "text-slate-100" : "text-slate-900"}`}
                 data-tina-field={tinaField(item, "title")}
               >
                 {item.title}
               </h3>
               <p
-                className={`mt-3 leading-7 ${subtextColorClass}`}
+                className={`mt-3 leading-7 ${isDark ? "text-slate-300" : "text-slate-600"}`}
                 data-tina-field={tinaField(item, "description")}
               >
                 {item.description}

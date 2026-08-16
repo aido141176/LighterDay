@@ -1,4 +1,5 @@
 import { tinaField } from "tinacms/dist/react";
+import { sectionClasses } from "./sectionUtils";
 
 type Props = {
   block: any;
@@ -7,33 +8,15 @@ type Props = {
 export default function FAQ({ block }: Props) {
   const heading = block?.heading ?? "";
   const items = block?.items ?? [];
-  const sectionBackground = block?.sectionBackground ?? "white";
-
-  const sectionBackgroundClass =
-    sectionBackground === "light"
-      ? "mylight"
-      : sectionBackground === "dark"
-      ? "mydark"
-      : sectionBackground === "primary"
-      ? "myprimary"
-      : "bg-white";
-
-  const textColorClass =
-    sectionBackground === "dark" || sectionBackground === "primary"
-      ? "text-slate-100"
-      : "text-slate-900";
-
-  const subtextColorClass =
-    sectionBackground === "dark" || sectionBackground === "primary"
-      ? "text-slate-300"
-      : "text-slate-600";
+  const { sectionBackgroundClass, textAlignClass, paddingClass, maxWidthClass, isDark } =
+    sectionClasses(block);
 
   return (
-    <section className={`faq-section py-16 ${sectionBackgroundClass}`}>
-      <div className="mx-auto max-w-3xl px-4">
+    <section className={`faq-section ${paddingClass} ${sectionBackgroundClass} ${textAlignClass}`}>
+      <div className={`mx-auto w-full px-4 ${maxWidthClass}`}>
         {heading && (
           <h2
-            className="mb-10 text-center text-3xl font-bold tracking-tight"
+            className="mb-10 text-3xl font-bold tracking-tight"
             data-tina-field={tinaField(block, "heading")}
           >
             {heading}
@@ -45,19 +28,19 @@ export default function FAQ({ block }: Props) {
             <details
               key={idx}
               className={`faq-item rounded-xl border border-slate-200 p-5 ${
-                sectionBackground === "dark" || sectionBackground === "primary"
-                  ? "border-white/20 bg-transparent"
-                  : "bg-white shadow-sm"
+                isDark ? "border-white/20 bg-transparent" : "bg-white shadow-sm"
               }`}
             >
               <summary
-                className={`cursor-pointer list-none text-lg font-semibold ${textColorClass}`}
+                className={`cursor-pointer list-none text-lg font-semibold ${
+                  isDark ? "text-slate-100" : "text-slate-900"
+                }`}
                 data-tina-field={tinaField(item, "question")}
               >
                 {item.question}
               </summary>
               <p
-                className={`mt-3 leading-7 ${subtextColorClass}`}
+                className={`mt-3 leading-7 ${isDark ? "text-slate-300" : "text-slate-600"}`}
                 data-tina-field={tinaField(item, "answer")}
               >
                 {item.answer}

@@ -1,9 +1,13 @@
 import type { Template } from "tinacms";
+import { textAlignField, paddingField, maxWidthField } from "../fields";
 
 export const heroCarouselBlock: Template = {
   name: "heroCarousel",
   label: "Hero with Carousel",
   fields: [
+    textAlignField,
+    paddingField,
+    maxWidthField,
     {
       type: "string",
       name: "height",

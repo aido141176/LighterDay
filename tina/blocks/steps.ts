@@ -1,9 +1,9 @@
 import type { Template } from "tinacms";
 import { sectionBackgroundField, textAlignField, paddingField, maxWidthField } from "../fields";
 
-export const servicesBlock: Template = {
-  name: "services",
-  label: "Services",
+export const stepsBlock: Template = {
+  name: "steps",
+  label: "Steps / Timeline",
   fields: [
     sectionBackgroundField,
     textAlignField,
@@ -13,17 +13,17 @@ export const servicesBlock: Template = {
       type: "string",
       name: "heading",
       label: "Heading",
-      description: "Section title displayed above the services.",
+      description: "Section title displayed above the steps.",
     },
     {
       type: "object",
       name: "items",
-      label: "Services",
-      description: "Add service items. Click 'Add' to create a service.",
+      label: "Steps",
+      description: "Add steps in order. Click 'Add' to create a step.",
       list: true,
       ui: {
         itemProps: (item: { title?: string } | undefined) => ({
-          label: item?.title ? `Service: ${item.title}` : "New Service",
+          label: item?.title ? `Step: ${item.title}` : "New Step",
         }),
       },
       fields: [
@@ -31,22 +31,16 @@ export const servicesBlock: Template = {
           type: "string",
           name: "title",
           label: "Title",
-          description: "Name of the service.",
+          description: "Short name of the step.",
         },
         {
           type: "string",
           name: "description",
           label: "Description",
-          description: "Short description of the service.",
+          description: "Details of what happens in this step.",
           ui: {
             component: "textarea",
           },
-        },
-        {
-          type: "string",
-          name: "iconName",
-          label: "Icon Name",
-          description: "Icon identifier rendered with the service card.",
         },
       ],
     },

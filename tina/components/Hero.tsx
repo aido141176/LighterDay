@@ -1,4 +1,5 @@
 import { tinaField } from "tinacms/dist/react";
+import { sectionClasses } from "./sectionUtils";
 
 type Props = {
   block: any;
@@ -9,6 +10,7 @@ export default function Hero({ block }: Props) {
   const textAlign = block?.textAlign ?? "center";
   const overlayOpacity = block?.overlayOpacity ?? "40";
   const height = block?.height ?? "large";
+  const { paddingClass, maxWidthClass } = sectionClasses(block);
 
   const alignmentClasses = {
     left: "items-start text-left",
@@ -77,7 +79,7 @@ export default function Hero({ block }: Props) {
       <div className={`absolute inset-0 ${overlayClass}`}></div>
 
       <div
-        className={`relative z-10 flex w-full max-w-6xl flex-col px-6 py-16 text-white ${contentAlignment}`}
+        className={`relative z-10 flex w-full flex-col px-6 ${paddingClass} text-white ${contentAlignment} ${maxWidthClass}`}
       >
         <h1
           className="max-w-4xl text-4xl font-extrabold tracking-tight md:text-6xl"

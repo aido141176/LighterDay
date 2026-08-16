@@ -1,9 +1,9 @@
 import type { Template } from "tinacms";
 import { sectionBackgroundField, textAlignField, paddingField, maxWidthField } from "../fields";
 
-export const galleryBlock: Template = {
-  name: "gallery",
-  label: "Gallery",
+export const videoEmbedBlock: Template = {
+  name: "videoEmbed",
+  label: "Video Embed",
   fields: [
     sectionBackgroundField,
     textAlignField,
@@ -13,14 +13,13 @@ export const galleryBlock: Template = {
       type: "string",
       name: "heading",
       label: "Heading",
-      description: "Section title displayed above the gallery.",
+      description: "Section title displayed above the video.",
     },
     {
-      type: "image",
-      name: "images",
-      label: "Images",
-      description: "Upload images to display in the gallery.",
-      list: true,
+      type: "string",
+      name: "videoUrl",
+      label: "Video URL",
+      description: "YouTube or Vimeo video URL, e.g. https://www.youtube.com/watch?v=...",
     },
   ],
 };
