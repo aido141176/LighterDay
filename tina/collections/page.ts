@@ -1,5 +1,20 @@
 import type { Collection } from "tinacms";
-import { ctaBlock, cardGridBlock, heroBlock } from "../blocks";
+import {
+  ctaBlock,
+  cardGridBlock,
+  heroBlock,
+  teamBlock,
+  testimonialBlock,
+  servicesBlock,
+  galleryBlock,
+  faqBlock,
+  blogBlock,
+  fullTextBlock,
+  textWithImageBlock,
+  heroCarouselBlock,
+  contactBlock,
+  contactFormBlock,
+} from "../blocks";
 
 //import { sectionBackgroundField } from "../fields";
 
@@ -39,7 +54,7 @@ export const PageCollection: Collection = {
       label: "Page Sections",
       type: "object",
       list: true,
-      templates: [heroBlock, ctaBlock, cardGridBlock]
+      templates: [heroBlock, ctaBlock, cardGridBlock, teamBlock, testimonialBlock, servicesBlock, galleryBlock, faqBlock, blogBlock, fullTextBlock, textWithImageBlock, heroCarouselBlock, contactBlock, contactFormBlock]
     },
   ],
 };

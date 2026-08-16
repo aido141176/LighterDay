@@ -6,6 +6,7 @@ type Props = {
   variables: PageQueryVariables;
   data: PageQuery;
   query: string;
+  posts?: any[];
 };
 
 const PageRenderer = (props: Props) => {
@@ -21,7 +22,7 @@ const PageRenderer = (props: Props) => {
     return <main>No page data found.</main>;
   }
 
-  return <Page page={page} />;
+  return <Page page={page} posts={props.posts} />;
 };
 
 export default PageRenderer;

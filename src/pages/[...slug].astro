@@ -17,10 +17,24 @@ export async function getStaticPaths() {
 		.map((p) => ({
 			params: { slug: p.id },
 			props: {
-				getTinaProps: async () =>
-					client.queries.page({
-						relativePath: p.data.tinaInfo.relativePath,
-					}),
+				getTinaProps: async () => {
+					const [pageData, postsData] = await Promise.all([
+						client.queries.page({
+							relativePath: p.data.tinaInfo.relativePath,
+						}),
+						client.queries.blogConnection({
+							first: 50,
+							sort: "pubDate",
+						}),
+					]);
+
+					const posts =
+						postsData.data.blogConnection.edges
+							?.map((edge) => edge?.node)
+							.filter(Boolean) ?? [];
+
+					return { ...pageData, posts };
+				},
 			},
 		}));
 }

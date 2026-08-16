@@ -6,6 +6,8 @@ import Footer from '../components/Footer.astro';
 import config from '../content/config/config.json';
 import DataFlow from "../components/DataFlow.astro";
 import CRM from "../components/CRMForm.astro";
+import { BorderBeam } from '../components/magicui/border-beam';
+
 import CRMBooking from "../components/CRMBooking.astro";
 import client from '../../tina/__generated__/client';
 import PageRenderer from "../../tina/pages/PageRenderer.tsx";
@@ -19,6 +21,8 @@ import "../styles/global.css";
 		<DataFlow/>
 		<CRM/>
 		<CRMBooking/>
+		    <!-- The custom card component -->
+    <BorderBeam client:load />
 
 
 </BaseLayout>

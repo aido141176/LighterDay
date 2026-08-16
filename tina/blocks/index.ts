@@ -1,3 +1,14 @@
 export { ctaBlock } from "./cta";
 export { cardGridBlock } from "./cardGrid";
 export { heroBlock } from "./hero";
+export { teamBlock } from "./team";
+export { testimonialBlock } from "./testimonial";
+export { servicesBlock } from "./services";
+export { galleryBlock } from "./gallery";
+export { faqBlock } from "./faq";
+export { blogBlock } from "./blog";
+export { fullTextBlock } from "./fullText";
+export { textWithImageBlock } from "./textWithImage";
+export { heroCarouselBlock } from "./heroCarousel";
+export { contactBlock } from "./contact";
+export { contactFormBlock } from "./contactForm";
