@@ -120,6 +120,10 @@ Do NOT inline templates in `page.ts` and do NOT write `.astro` renderers for blo
 - Every section component supports `sectionBackgroundField` (white/light/dark) via the shared `mylight`/`mydark`/`myprimary` class map — copy the `sectionBackgroundClass` pattern from `CTA.tsx`.
 - **Shared design fields:** every block gets `textAlignField`/`paddingField`/`maxWidthField` from `tina/fields/design.ts` (except where the block already has its own `textAlign`). Components resolve them via `sectionClasses(block)` in `tina/components/sectionUtils.ts` — always use that util, never hardcode `py-16`/`max-w-6xl`/`text-center`.
 - Object lists get `ui.itemProps` for readable labels in the CMS sidebar.
+- **CMS UX conventions (every field):**
+  - **`isTitle: true`** on the document-level title field (e.g. page `title`, blog `title`) — makes it the row label in the CMS list and the basis for new-document filenames.
+  - **`ui.itemProps`** on every object list (members, quotes, plans, ...) — gives each item a readable sidebar label like `Member: John Smith` instead of `Item 1`. Block templates in the page builder already show their template name (Hero, Team, ...) by default; template-level `ui.itemProps` can customize that further if needed.
+  - **`label` + `description`** on EVERY field — the label is the input name, the description is helper text under it explaining what to enter (e.g. `Price text, e.g. $29/mo.`). A blank input gives no context; a good description removes all guesswork for non-technical customers and AI agents.
 - Components consume a single `block` prop; data not in the page query (e.g. blog posts) is threaded from `getStaticPaths` → `PageRenderer` → `Page` → the section component (see the Blog section).
 - Components are typed loosely (`any`) throughout this repo; match that rather than introducing strict types.
 - Style with Tailwind utility classes; site-specific overrides live in custom CSS files imported by components (e.g. `src/styles/CardGridSection.css`) or the `my*` utility classes.
@@ -156,10 +160,48 @@ All sections except `hero`/`heroCarousel` (media-based) share the same design fi
 | contact         | `PageBlocksContact`       | Rich text + address, office hours, phone |
 | contactForm     | `PageBlocksContactForm`   | Title, textarea text, recipient email + static form markup |
 
+### Using Custom HTML (`PageBlocksCustomHtml`)
+
+The escape hatch for any design the other sections cannot express — raw HTML is rendered as-is inside a padded, max-width container (the `customHtml` block gets `paddingField`/`maxWidthField` but no `sectionBackground`). Rules for design agents:
+
+- Use it ONLY when no existing section fits; prefer the 23 structured sections first.
+- Self-contained HTML only: inline any `<style>`/`<script>`/images within the snippet — do NOT add CSS or JS files elsewhere for it (Tailwind utilities ARE available since the site compiles them).
+- Prefer Tailwind utility classes over custom CSS for consistency with the rest of the site.
+- The snippet is edited as plain text in the CMS sidebar (not inline-editable).
+
+---
+
+## Global Config & Site-Wide Settings
+
+`tina/collections/global-config.ts` is a single JSON document (`src/content/config/config.json`) marked `ui: { global: true }` — edited from the CMS via the Global toggle on any page. It feeds the nav, footer, and SEO defaults through `BaseLayout.astro`.
+
+| Field | Purpose | Options |
+|-------|---------|---------|
+| `seo.title` | Site-wide SEO title fallback | free text |
+| `seo.description` | Site-wide meta description fallback | free text |
+| `seo.siteOwner` | Name shown in the footer | free text |
+| `seo.image` | Default social share image for all pages | image |
+| `navigationSettings.logo` | Logo in the navigation bar | image |
+| `navigationSettings.navPosition` | Menu alignment | `justify-start` (left), `justify-end` (right), `justify-center` |
+| `navigationSettings.backgroundStyle` | Nav background | `bg-white text-gray-800`, `mylight text-gray-800`, `mydark text-white`, `bg-transparent` |
+| `navigationSettings.sticky` | Nav behavior | `relative` (scrolls away), `fixed top-0 left-0 w-full z-50` (stays on top) |
+| `nav` | Menu items (reorder/add/remove) | templates: `simpleLink`, `dropdown`, `megaMenu` (see below) |
+| `contactLinks` | Icon links in the nav/footer | `title`, `link`, `icon` (Tabler icon picker, `Tb*` names from `react-icons/tb`) |
+
+> ⚠️ **`navigationSettings` values ARE Tailwind class strings** consumed directly by `NewNav.astro`. Always pick from the existing options above — never invent new values. If a design needs a different nav look, change the classes in `NewNav.astro` itself, not the config values.
+
+### Nav menu templates (`nav`)
+
+- `simpleLink` — `label` (menu text) + `link` (URL)
+- `dropdown` — `label` (trigger) + `subMenu[]` items: `label` + `link`
+- `megaMenu` — `label` (trigger) + `columns[]`: `title` + `links[]` (`label` + `link`)
+
 ---
 
 ## Routing Notes
 
 - `/admin/index.html` is the Tina admin (served from `public/admin/`); the catch-all `[...slug].astro` will 404 `/admin/`.
-- Blog post URLs are `/blog/{filename}/` (set via `ui.router` in `tina/collections/blog.ts`).
+- Blog post URLs are `/blog/{filename}/` (handled by the catch-all `[...slug].astro` routes, not the CMS).
+- **`ui.router` enables inline editing (visual mode).** With a router on any collection, the admin opens straight into the `#/~/<path>` visual-editing view: the live site in an iframe with the form sidebar (hover any `data-tina-field` element to see its outline; click it to open that block's form). The collection list/forms are still reachable via the hamburger menu → collection → document.
+- **If the sidebar shows "TinaCMS form fields will appear here" and a modal with "Enter Edit Mode", the CMS is not authenticated.** Click **"Enter Edit Mode"** — it sets `localStorage["tina.local.isLogedIn"]` (local-mode auth) and the forms load. Without that flag the CMS never enables and forms stay empty everywhere.
 - `src/pages/index.astro` and `about.astro` are standalone pages that do NOT use the page builder; `[...slug].astro` handles `src/content/page/*.mdx`.

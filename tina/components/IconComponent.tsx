@@ -3,7 +3,7 @@ import { wrapFieldsWithMeta } from "tinacms";
 import * as tb from "react-icons/tb";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
-const IconComponent = wrapFieldsWithMeta((props) => {
+const IconComponent = wrapFieldsWithMeta((props: any) => {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [containerWidth, setContainerWidth] = useState(0);
 	const iconName = props.input.value as unknown as keyof typeof tb;

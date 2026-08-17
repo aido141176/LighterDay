@@ -1,11 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import client from "../../tina/__generated__/client";
-import Page from "../../tina/pages/Page";
-import Footer from "../components/Footer.astro";
-import Header from "../components/Header.astro";
-import BaseHead from "../components/BaseHead.astro";
-import config from '../content/config/config.json';
 import PageRenderer from "../../tina/pages/PageRenderer";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
@@ -41,24 +36,8 @@ export async function getStaticPaths() {
 
 const { getTinaProps } = Astro.props;
 const data = await getTinaProps();
-
-console.log("Props received:", { getTinaProps, data });
-
-const fruits = ['apple', 'banana', 'cherry'];
-console.log(fruits);
-
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={data.data.page.seoTitle} description={config.seo.description} />
-	</head>
-	<body>
-		<Header />
-		<h1>kjhsdbgjlkfhsljfh</h1>
-		<PageRenderer {...data} client:tina />
-		
-		<Footer />
-	</body>
-</html>
+<BaseLayout>
+	<PageRenderer {...data} client:tina />
+</BaseLayout>

@@ -4,24 +4,37 @@ import NewNav from "../components/navigation/NewNav.astro";
 import Footer from "../components/ui/Footer.astro";
 import { client } from '../../tina/__generated__/client';
 
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const { title: titleProp, description: descriptionProp, image: imageProp } = Astro.props;
+
 // 1. Fetch Global Config (Nav, Social, Global SEO)
 const response = await client.queries.config({ relativePath: 'config.json' });
 const siteSettings = response.data.config;
 const navItems = siteSettings.nav;
 const socialLinks = siteSettings.contactLinks;
-const navStyles = siteSettings.navigationSettings; // Our new settings object
-// 2. Fetch Page Data based on URL
+const navStyles = siteSettings.navigationSettings;
+
+// 2. Fetch Page Data based on URL (best-effort; blog routes have no page document)
 const { slug } = Astro.params;
-const path = slug ? `${slug}.md` : 'home.mdx';
-const pageresponse = await client.queries.page({ relativePath: path });
-const pageContent = pageresponse.data.page;
+const path = slug ? `${slug}.mdx` : 'home.mdx';
+let pageContent: any = null;
+try {
+  const pageresponse = await client.queries.page({ relativePath: path });
+  pageContent = pageresponse.data.page;
+} catch (e) {
+  pageContent = null;
+}
 
-// 3. SEO Logic (Using the variables we just created above)
-const metaTitle = pageContent.seo?.title || siteSettings.seo?.title || "LighterDay";
-const metaDescription = pageContent.seo?.description || siteSettings.seo?.description || "Default Description";
+// 3. SEO Logic: explicit props win, then page frontmatter, then site-wide config
+const metaTitle = titleProp || pageContent?.seo?.title || siteSettings.seo?.title || "LighterDay";
+const metaDescription = descriptionProp || pageContent?.seo?.description || siteSettings.seo?.description || "Default Description";
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || "https://example.com");
-const shareImage = pageContent.seo?.image || siteSettings.seo?.image || "/images/og.jpg";
-
+const shareImage = imageProp || pageContent?.seo?.image || siteSettings.seo?.image || "/favicon.svg";
 
 ---
 
@@ -48,12 +61,12 @@ const shareImage = pageContent.seo?.image || siteSettings.seo?.image || "/images
   </head>
 
   <body>
-   <NewNav 
-      navData={navItems} 
-      socialData={socialLinks} 
-      styles={navStyles} 
+   <NewNav
+      navData={navItems}
+      socialData={socialLinks}
+      styles={navStyles}
     />
-    
+
     <main>
       <slot />
     </main>

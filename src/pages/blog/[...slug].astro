@@ -23,6 +23,10 @@ const { post, getTinaProps } = Astro.props;
 const tinaProps = await getTinaProps();
 ---
 
-<BlogPost {...	post.data}>
-		<AdminBlogPost {...tinaProps} client:tina/>
+<BlogPost
+	title={post.data.title}
+	description={post.data.description}
+	image={post.data.heroImage}
+>
+	<AdminBlogPost {...tinaProps} client:tina />
 </BlogPost>

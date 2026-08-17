@@ -29,12 +29,19 @@ export const GlobalConfigCollection: Collection = {
         },
         {
           name: "siteOwner",
-          label: "Your Name, Company Name (Used in the footer",
+          label: "Your Name / Company Name (Used in the footer)",
           required: true,
           type: "string",
+          description: "Name shown in the site footer.",
           ui: {
             defaultValue: "Your name here"
           },
+        },
+        {
+          name: "image",
+          label: "Social Share Image",
+          type: "image",
+          description: "Default image shown when any page of the site is shared on social media.",
         },
         // Add more settings here...
       ],
@@ -45,10 +52,11 @@ export const GlobalConfigCollection: Collection = {
   label: "Navigation Styles & Layout",
   type: "object",
   fields: [
-    { name: "logo", label: "Site Logo", type: "image" },
+    { name: "logo", label: "Site Logo", type: "image", description: "Logo shown in the navigation bar." },
     {
       name: "navPosition",
       label: "Menu Alignment",
+      description: "Where the menu sits in the navigation bar.",
       type: "string",
       options: [
         { label: "Left (Next to Logo)", value: "justify-start" },
@@ -59,6 +67,7 @@ export const GlobalConfigCollection: Collection = {
     {
       name: "backgroundStyle",
       label: "Background Color",
+      description: "Background color of the navigation bar.",
       type: "string",
       options: [
         { label: "White", value: "bg-white text-gray-800" },
@@ -70,6 +79,7 @@ export const GlobalConfigCollection: Collection = {
     {
       name: "sticky",
       label: "Navigation Behavior",
+      description: "Whether the navigation stays at the top when scrolling.",
       type: "string",
       options: [
         { label: "Relative (Scrolls away)", value: "relative" },
@@ -90,30 +100,30 @@ export const GlobalConfigCollection: Collection = {
                 name: "simpleLink",
                 label: "Simple Link",
                 ui: {
-                  itemProps: (item) => ({ label: `Link: ${item?.label}` }),
+                  itemProps: (item: { label?: string } | undefined) => ({ label: `Link: ${item?.label ?? ""}` }),
                 },
                 fields: [
-                  { name: "label", label: "Label", type: "string" },
-                  { name: "link", label: "Link", type: "string" },
+                  { name: "label", label: "Label", type: "string", description: "Text shown in the menu." },
+                  { name: "link", label: "Link", type: "string", description: "URL the menu item goes to." },
                 ],
               },
               {
                 name: "dropdown",
                 label: "Dropdown Menu",
                 ui: {
-                  itemProps: (item) => ({ label: `Dropdown: ${item?.label}` }),
+                  itemProps: (item: { label?: string } | undefined) => ({ label: `Dropdown: ${item?.label ?? ""}` }),
                 },
                 fields: [
-                  { name: "label", label: "Parent Label", type: "string" },
+                  { name: "label", label: "Parent Label", type: "string", description: "Text shown in the menu for the dropdown trigger." },
                   {
                     name: "subMenu",
                     label: "Sub Menu Items",
                     type: "object",
                     list: true,
-                    ui: { itemProps: (item) => ({ label: item?.label }) },
+                    ui: { itemProps: (item: { label?: string } | undefined) => ({ label: item?.label ?? "Item" }) },
                     fields: [
-                      { name: "label", label: "Label", type: "string" },
-                      { name: "link", label: "Link", type: "string" },
+                      { name: "label", label: "Label", type: "string", description: "Text shown in the menu." },
+                      { name: "link", label: "Link", type: "string", description: "URL the menu item goes to." },
                     ],
                   },
                 ],
@@ -122,26 +132,28 @@ export const GlobalConfigCollection: Collection = {
                 name: "megaMenu",
                 label: "Mega Menu",
                 ui: {
-                  itemProps: (item) => ({ label: `Mega: ${item?.label}` }),
+                  itemProps: (item: { label?: string } | undefined) => ({ label: `Mega: ${item?.label ?? ""}` }),
                 },
                 fields: [
-                  { name: "label", label: "Parent Label", type: "string" },
+                  { name: "label", label: "Parent Label", type: "string", description: "Text shown in the menu for the mega menu trigger." },
                   {
                     name: "columns",
                     label: "Menu Columns",
                     type: "object",
                     list: true,
+                    ui: { itemProps: (item: { title?: string } | undefined) => ({ label: item?.title ?? "Column" }) },
                     fields: [
-                      { name: "title", label: "Column Title", type: "string" },
-                      { 
-                        name: "links", 
-                        label: "Links", 
-                        type: "object", 
-                        list: true, 
+                      { name: "title", label: "Column Title", type: "string", description: "Heading shown above the links in this column." },
+                      {
+                        name: "links",
+                        label: "Links",
+                        type: "object",
+                        list: true,
+                        ui: { itemProps: (item: { label?: string } | undefined) => ({ label: item?.label ?? "Link" }) },
                         fields: [
-                          { name: "label", label: "Label", type: "string" },
-                          { name: "link", label: "Link", type: "string" }
-                        ] 
+                          { name: "label", label: "Label", type: "string", description: "Text shown in the menu." },
+                          { name: "link", label: "Link", type: "string", description: "URL the menu item goes to." }
+                        ]
                       },
                     ],
                   },
@@ -165,19 +177,21 @@ export const GlobalConfigCollection: Collection = {
         {
           name: "title",
           label: "Title",
-          type: "string"
+          type: "string",
+          description: "Text shown next to the icon."
         },
         {
           name: "link",
           label: "Link",
-          type: "string"
+          type: "string",
+          description: "URL the icon links to."
         },
         {
           name: "icon",
           label: "Icon",
           type: "string",
+          description: "Pick an icon for the contact link.",
           ui: {
-            //@ts-ignore
             component: IconComponent
           }
         }

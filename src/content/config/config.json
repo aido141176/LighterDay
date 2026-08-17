@@ -2,7 +2,8 @@
   "seo": {
     "title": "Lighter Day ",
     "description": "The best web company in the world",
-    "siteOwner": "Lighter Day web company"
+    "siteOwner": "Lighter Day web company",
+    "image": "/favicon.svg"
   },
   "navigationSettings": {
     "logo": "/2490299-200.png",

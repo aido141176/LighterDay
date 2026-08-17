@@ -8,19 +8,7 @@ export default {
       fontFamily: {
         sans: ['Inter', ...fontFamily.sans],
       },
-      animation: {
-        // Example animations used in Magic UI
-        "border-beam": "border-beam calc(var(--duration)*1s) infinite linear",
-        "image-glow": "image-glow 4s ease-in-out infinite",
-      },
-      keyframes: {
-        "border-beam": {
-          "100%": {
-            "offset-distance": "100%",
-          },
-        },
-      },
+
     },
-  },
-  plugins: [],
+  }
 };

@@ -12,6 +12,7 @@ export const heroCarouselBlock: Template = {
       type: "string",
       name: "height",
       label: "Carousel Height",
+      description: "How tall the carousel section is.",
       options: [
         { value: "small", label: "Small" },
         { value: "medium", label: "Medium" },
