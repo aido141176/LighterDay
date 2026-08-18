@@ -16,59 +16,75 @@ const json = (payload: unknown, status: number) =>
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, cookies }) => {
-  let body: any;
   try {
-    body = await request.json();
-  } catch {
-    return json({ error: "Invalid JSON body" }, 400);
-  }
-
-  const username = body?.username ?? body?.email ?? "";
-  const password = body?.password ?? "";
-
-  if (!username || !password) {
-    return json({ error: "Username and password are required" }, 400);
-  }
-
-  try {
-    const wpResponse = await fetch(WP_AUTH_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-
-    const wpData = await wpResponse.json().catch(() => null);
-
-    if (!wpResponse.ok || !wpData?.token || typeof wpData.token !== "string") {
-      console.error(`[wp-auth] login rejected by WordPress (HTTP ${wpResponse.status})`);
-      return json({ error: "Invalid username or password" }, 401);
+    let body: any;
+    try {
+      body = await request.json();
+    } catch {
+      return json({ error: "Invalid JSON body" }, 400);
     }
 
-    const expiresIn =
-      typeof wpData.expires_in === "number" && wpData.expires_in > 0
-        ? wpData.expires_in
-        : MAX_AGE_SECONDS;
+    const username = body?.username ?? body?.email ?? "";
+    const password = body?.password ?? "";
 
-    cookies.set(COOKIE_NAME, wpData.token, {
-      httpOnly: true,
-      secure: import.meta.env.PROD,
-      sameSite: "strict",
-      path: "/",
-      maxAge: expiresIn,
-    });
+    if (!username || !password) {
+      return json({ error: "Username and password are required" }, 400);
+    }
 
-    return json(
-      {
-        success: true,
-        user: {
-          displayName: wpData.user_display_name ?? null,
-          email: wpData.user_email ?? null,
+    try {
+      const wpResponse = await fetch(WP_AUTH_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const wpText = await wpResponse.text();
+      let wpData: any = null;
+      try {
+        wpData = JSON.parse(wpText);
+      } catch {
+        wpData = null;
+      }
+
+      if (!wpResponse.ok || !wpData?.token || typeof wpData.token !== "string") {
+        console.error(
+          `[wp-auth] login rejected by WordPress (HTTP ${wpResponse.status}): ${wpText.slice(0, 300)}`,
+        );
+        return json({ error: "Invalid username or password" }, 401);
+      }
+
+      const expiresIn =
+        typeof wpData.expires_in === "number" && wpData.expires_in > 0
+          ? wpData.expires_in
+          : MAX_AGE_SECONDS;
+
+      cookies.set(COOKIE_NAME, wpData.token, {
+        httpOnly: true,
+        secure: import.meta.env.PROD,
+        sameSite: "strict",
+        path: "/",
+        maxAge: expiresIn,
+      });
+
+      return json(
+        {
+          success: true,
+          user: {
+            displayName: wpData.user_display_name ?? null,
+            email: wpData.user_email ?? null,
+          },
         },
-      },
-      200,
-    );
+        200,
+      );
+    } catch (error) {
+      console.error("[wp-auth] login request failed", error instanceof Error ? error.message : error);
+      return json({ error: "Authentication service unavailable" }, 401);
+    }
   } catch (error) {
-    console.error("[wp-auth] login request failed", error instanceof Error ? error.message : error);
-    return json({ error: "Authentication service unavailable" }, 401);
+    console.error("[wp-auth] login handler crashed", error instanceof Error ? error.stack : error);
+    return json(
+      { error: "Login handler error: " + (error instanceof Error ? error.message : String(error)) },
+      500,
+    );
   }
 };
