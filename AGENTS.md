@@ -209,3 +209,20 @@ The escape hatch for any design the other sections cannot express — raw HTML i
 - **If the sidebar shows "TinaCMS form fields will appear here" and a modal with "Enter Edit Mode", the CMS is not authenticated.** Click **"Enter Edit Mode"** — it sets `localStorage["tina.local.isLogedIn"]` (local-mode auth) and the forms load. Without that flag the CMS never enables and forms stay empty everywhere.
 - `src/pages/index.astro` and `about.astro` statically map the `home.mdx`/`about.mdx` documents; `src/pages/[...slug].astro` (catch-all, `getStaticPaths` from `pageConnection()`) serves every OTHER document in `src/content/page/*.mdx` at `/{filename}/`, e.g. a new `services.mdx` → `/services/`. Unknown URLs fall through to `404.astro`.
 - `src/pages/rss.xml.js` and `src/pages/robots.txt.ts` are build-time endpoints; `robots.txt` advertises `Sitemap: {SITE_URL}/sitemap-index.xml` (falls back to Vercel URL, then localhost).
+
+---
+
+## WordPress JWT Auth Bridge (`/api/auth/*`)
+
+Replaces TinaCloud/GitHub login with WordPress credentials. The site is static-by-default; the auth routes opt out of prerendering (`export const prerender = false`) and run as Vercel serverless functions via the `@astrojs/vercel` adapter (`astro.config.mjs`). `npm run build` therefore produces `.vercel/output/` (static + one serverless function) instead of a plain `dist/` folder.
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/api/auth/login` | POST | JSON `{ username \| email, password }` → forwards to WordPress JWT endpoint, sets HttpOnly `wp_jwt_token` cookie (`SameSite=Strict`, `Secure` in production), returns `{ success, user }`. Invalid credentials → generic 401, never raw WP errors. |
+| `/api/auth/logout` | POST | Deletes the `wp_jwt_token` cookie. |
+| `/api/auth/session` | GET | Reads the cookie, validates it against WordPress (`Authorization: Bearer <token>`), returns `{ authenticated, user }`. |
+
+- WordPress endpoints default to `https://api.amcd.com.au/wp-json/jwt-auth/v1/token` and `.../token/validate`; override with env vars `WP_JWT_AUTH_URL` / `WP_JWT_VALIDATE_URL`.
+- `/login` page POSTs to the login endpoint and redirects to `/dashboard/` on success.
+- `/dashboard/` is the protected-page pattern: an SSR page (`export const prerender = false`) that reads `wp_jwt_token`, validates it against WordPress via `validateWpToken()` in `src/lib/wpAuth.ts`, and `Astro.redirect("/login")`s when missing/invalid. Copy this pattern for any token-gated frontend content. `noindex` is set so gated pages never enter search results.
+- **Known limits:** TinaCMS has no native "custom JWT" auth provider — this bridge gates the frontend, not the Tina admin. The admin shell (`public/admin/index.html`) is a static file that bypasses Astro routes and remains open; it is only for local editing (where Tina's local server runs). On a static Vercel deploy there is no Tina GraphQL/filesystem backend, so the admin forms cannot persist edits in production regardless of auth.

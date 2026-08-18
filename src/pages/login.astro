@@ -1,0 +1,98 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Sign in" description="Sign in to the LighterDay content editor.">
+  <div class="mx-auto flex min-h-[70vh] w-full max-w-md items-center px-4 py-16">
+    <div class="w-full rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+      <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">Sign in</h1>
+      <p class="mt-2 text-sm text-slate-500">
+        Use your WordPress account to access protected content.
+      </p>
+
+      <form id="login-form" class="mt-6 space-y-4">
+        <div>
+          <label for="username" class="mb-1 block text-sm font-semibold text-slate-700">
+            Username or email
+          </label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            required
+            autocomplete="username"
+            class="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-lime-700 focus:outline-none focus:ring-1 focus:ring-lime-700"
+          />
+        </div>
+        <div>
+          <label for="password" class="mb-1 block text-sm font-semibold text-slate-700">
+            Password
+          </label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            required
+            autocomplete="current-password"
+            class="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-lime-700 focus:outline-none focus:ring-1 focus:ring-lime-700"
+          />
+        </div>
+
+        <p id="error-message" class="hidden text-sm font-medium text-red-600" role="alert"></p>
+
+        <button
+          type="submit"
+          id="submit-button"
+          class="w-full rounded-lg bg-lime-700 px-4 py-2.5 font-semibold text-white transition hover:bg-lime-600 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          Sign in
+        </button>
+      </form>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById("login-form") as HTMLFormElement | null;
+  const usernameInput = document.getElementById("username") as HTMLInputElement | null;
+  const passwordInput = document.getElementById("password") as HTMLInputElement | null;
+  const errorMessage = document.getElementById("error-message") as HTMLParagraphElement | null;
+  const submitButton = document.getElementById("submit-button") as HTMLButtonElement | null;
+
+  const showError = (message: string) => {
+    if (!errorMessage) return;
+    errorMessage.textContent = message;
+    errorMessage.classList.remove("hidden");
+  };
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!usernameInput || !passwordInput || !submitButton) return;
+
+    submitButton.disabled = true;
+    errorMessage?.classList.add("hidden");
+
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: usernameInput.value,
+          password: passwordInput.value,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        showError(data?.error || "Sign-in failed. Please try again.");
+        submitButton.disabled = false;
+        return;
+      }
+
+      window.location.href = "/dashboard/";
+    } catch {
+      showError("Network error. Please try again.");
+      submitButton.disabled = false;
+    }
+  });
+</script>

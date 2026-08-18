@@ -3,6 +3,7 @@ import { defineConfig, fontProviders } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import react from '@astrojs/react';
+import vercel from '@astrojs/vercel';
 import tinaDirective from "./astro-tina-directive/register"
 import tailwindcss from "@tailwindcss/vite";
 import path from 'path';
@@ -10,6 +11,9 @@ import path from 'path';
 export default defineConfig({
 	// Production: set SITE_URL. Fallbacks: Vercel deployment URL, then localhost for dev builds.
 	site: process.env.SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:4321"),
+	// Static by default (Astro 5.18): all pages prerender; API routes with
+	// `export const prerender = false` (e.g. /api/auth/*) run as Vercel serverless functions.
+	adapter: vercel(),
 	integrations: [mdx(), sitemap(), react(), tinaDirective()],
 	vite: {
 		   resolve: {

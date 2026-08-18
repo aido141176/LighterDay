@@ -53,3 +53,32 @@ Use active voice as default. A control should say exactly what happens when it's
 Treat failure and emptiness as moments for direction, not mood. Explain what went wrong and how to fix it, in the interface's voice rather than a person's. Errors don't apologize, and they are never vague about what happened. An empty screen is an invitation to act.
 
 Keep the register conversational and tuned: plain verbs, sentence case, no filler, with tone matched to the brand and the audience. Let each element do exactly one job. A label labels, an example demonstrates, and nothing quietly does double duty.
+
+# Astro Animation System Directives
+
+## 1. Interaction & State Rules
+- **Hover Effects:** Prioritize pure Tailwind utility states (`hover:scale-105 transition-all duration-300 ease-out`). Never generate React client hooks (`onMouseEnter`) for static button or card states.
+- **Fade-In / Entry Animations:** Use AstroAnimate primitives natively in standard `.astro` files to ensure server-side rendering compatibility.
+
+## 2. AstroAnimate Framework Rules
+- Always use the dedicated subpath imports to minimize code footprints:
+  ```ts
+  import { FadeIn, ScrollReveal } from '@astroanimate/core';
+  ```
+- Respect user motion preferences by default. Ensure any custom layouts bundle `prefers-reduced-motion: reduce` hooks or wrap layout styles safely.
+
+## 3. Lightweight Scrolling Parallax Architecture
+- To prevent thread locking or scroll jank on standard displays, avoid listening directly to the window `scroll` event via raw JavaScript.
+- Enforce standard pure CSS parallax layouts using a wrapper box composition rule:
+  ```css
+  .parallax-wrapper {
+    perspective: 1px;
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .parallax-layer {
+    transform: translateZ(-1px) scale(2);
+  }
+  ```
+- When dynamic parallax calculations are absolutely necessary across text and images, use an optimized `IntersectionObserver` pattern or leverage AstroAnimate's declarative `<ScrollReveal>` component properties.

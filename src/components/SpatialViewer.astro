@@ -1,0 +1,56 @@
+---
+// src/components/SpatialViewer.astro
+// Lightweight pseudo-3D frame animation system
+const totalFrames = 48;
+---
+
+<div class="3d-container relative w-full h-[500px] cursor-grab active:cursor-grabbing flex items-center justify-center overflow-hidden">
+  <!-- Pre-render the initial canvas plate -->
+  <img 
+    id="spatial-render" 
+    src="/frames/hero_001.png" 
+    alt="3D Spatial Product Display" 
+    class="w-full h-full object-contain pointer-events-none select-none"
+    data-total={totalFrames}
+  />
+</div>
+
+<script>
+  const targetImage = document.getElementById('spatial-render') as HTMLImageElement;
+  if (targetImage) {
+    const total = parseInt(targetImage.dataset.total || '48');
+    let isDragging = false;
+    let startX = 0;
+    let currentFrame = 1;
+
+    // Fast-loading image cache hook to prevent flicker during interaction
+    for (let i = 1; i <= total; i++) {
+      const img = new Image();
+      img.src = `/frames/hero_${String(i).padStart(3, '0')}.png`;
+    }
+
+    const container = targetImage.parentElement;
+    if (container) {
+      container.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - startX;
+        // Adjust structural sensitivity (higher divider = slower rotation)
+        const frameOffset = Math.floor(deltaX / 12); 
+        
+        let newFrame = ((currentFrame + frameOffset - 1) % total) + 1;
+        if (newFrame <= 0) newFrame = total + newFrame;
+
+        targetImage.src = `/frames/hero_${String(newFrame).padStart(3, '0')}.png`;
+      });
+
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+    }
+  }
+</script>
