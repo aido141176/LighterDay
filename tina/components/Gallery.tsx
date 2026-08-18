@@ -28,7 +28,7 @@ export default function Gallery({ block }: Props) {
             <figure key={idx} className="gallery-item overflow-hidden rounded-lg">
               <img
                 src={image}
-                alt={heading ? `${heading} image ${idx + 1}` : `Gallery image ${idx + 1}`}
+                alt={block.altText ? `${block.altText} ${idx + 1}` : heading ? `${heading} image ${idx + 1}` : `Gallery image ${idx + 1}`}
                 className="h-48 w-full object-cover transition duration-300 hover:scale-105 md:h-56"
                 data-tina-field={tinaField(block, "images")}
               />

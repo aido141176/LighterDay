@@ -1,9 +1,9 @@
 {
   "seo": {
-    "title": "Lighter Day ",
-    "description": "The best web company in the world",
-    "siteOwner": "Lighter Day web company",
-    "image": "/favicon.svg"
+    "title": "LighterDay",
+    "description": "LighterDay builds modern websites and AI automation that save your team hours every week.",
+    "siteOwner": "LighterDay",
+    "image": "/hero-cover-image-scaled.webp"
   },
   "navigationSettings": {
     "logo": "/2490299-200.png",
@@ -13,73 +13,18 @@
   },
   "nav": [
     {
-      "label": "hello",
-      "link": "about/",
+      "label": "Home",
+      "link": "/",
       "_template": "simpleLink"
     },
     {
-      "label": "hello",
-      "subMenu": [
-        {
-          "label": "what",
-          "link": "about/"
-        },
-        {
-          "label": "yep",
-          "link": "hello/"
-        }
-      ],
-      "_template": "dropdown"
+      "label": "About",
+      "link": "/about/",
+      "_template": "simpleLink"
     },
     {
-      "label": "mega",
-      "columns": [
-        {
-          "title": "col1",
-          "links": [
-            {
-              "label": "col1 link1",
-              "link": "asesd/"
-            },
-            {
-              "label": "Item 2",
-              "link": "aboutg/"
-            }
-          ]
-        },
-        {
-          "title": "Col2",
-          "links": [
-            {
-              "label": "Yeh",
-              "link": "abouyt/"
-            }
-          ]
-        },
-        {
-          "title": "Menu 3",
-          "links": [
-            {
-              "label": "fuck",
-              "link": "about/"
-            }
-          ]
-        },
-        {
-          "title": "cmon",
-          "links": [
-            {
-              "label": "Lets go",
-              "link": "about/"
-            }
-          ]
-        }
-      ],
-      "_template": "megaMenu"
-    },
-    {
-      "label": "Simplae 2",
-      "link": "simple/",
+      "label": "Blog",
+      "link": "/blog/",
       "_template": "simpleLink"
     }
   ],

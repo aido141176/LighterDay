@@ -1,43 +1,33 @@
 ---
-import { getCollection } from "astro:content";
-import client from "../../tina/__generated__/client";
-import PageRenderer from "../../tina/pages/PageRenderer";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import client from '../../tina/__generated__/client';
+import PageRenderer from "../../tina/pages/PageRenderer.tsx";
 
 export async function getStaticPaths() {
-	const page = await getCollection("page");
+  const pagesResponse = await client.queries.pageConnection();
+  const pages = (pagesResponse.data.pageConnection.edges || [])
+    .filter((p) => !!p?.node)
+    .map((p) => p!.node!);
 
-	return page
-		.filter((p) => p.id !== "admin") // 🚨 exclude Tina admin
-		.map((p) => ({
-			params: { slug: p.id },
-			props: {
-				getTinaProps: async () => {
-					const [pageData, postsData] = await Promise.all([
-						client.queries.page({
-							relativePath: p.data.tinaInfo.relativePath,
-						}),
-						client.queries.blogConnection({
-							first: 50,
-							sort: "pubDate",
-						}),
-					]);
+  const staticRoutes = ["home", "about"];
 
-					const posts =
-						postsData.data.blogConnection.edges
-							?.map((edge) => edge?.node)
-							.filter(Boolean) ?? [];
-
-					return { ...pageData, posts };
-				},
-			},
-		}));
+  return pages
+    .filter((page) => !staticRoutes.includes(page._sys.filename))
+    .map((page) => ({
+      params: { slug: page._sys.filename },
+      props: { filename: page._sys.filename },
+    }));
 }
 
-const { getTinaProps } = Astro.props;
-const data = await getTinaProps();
+const { filename } = Astro.props;
+const data = await client.queries.page({ relativePath: `${filename}.mdx` });
+const page = data.data.page;
+const postsResponse = await client.queries.blogConnection();
+const posts = (postsResponse.data.blogConnection.edges || [])
+  .map((p) => p?.node)
+  .filter(Boolean);
 ---
 
-<BaseLayout>
-	<PageRenderer {...data} client:tina />
+<BaseLayout title={page?.seo?.title} description={page?.seo?.description} image={page?.seo?.image}>
+	<PageRenderer {...data} posts={posts} client:tina />
 </BaseLayout>

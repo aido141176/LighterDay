@@ -1,6 +1,4 @@
 
-import React from 'react'
-
 function FormattedDate({ date }: { date: string }) {
 	const _date = new Date(date)
 	return (

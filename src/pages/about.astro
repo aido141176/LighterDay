@@ -1,24 +1,16 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import config from '../content/config/config.json';
-import DataFlow from "../components/DataFlow.astro";
-import CRM from "../components/CRMForm.astro";
-import { BorderBeam } from '../components/magicui/border-beam';
-
-import CRMBooking from "../components/CRMBooking.astro";
 import client from '../../tina/__generated__/client';
 import PageRenderer from "../../tina/pages/PageRenderer.tsx";
-const data = await client.queries.page({relativePath: "about.mdx"});
-import "../styles/global.css";
+
+const data = await client.queries.page({ relativePath: "about.mdx" });
+const page = data.data.page;
+const postsResponse = await client.queries.blogConnection();
+const posts = (postsResponse.data.blogConnection.edges || [])
+  .map((p) => p?.node)
+  .filter(Boolean);
 ---
 
-<BaseLayout>
-
-		<PageRenderer {...data} client:tina />
-
-
-
+<BaseLayout title={page?.seo?.title} description={page?.seo?.description} image={page?.seo?.image}>
+	<PageRenderer {...data} posts={posts} client:tina />
 </BaseLayout>

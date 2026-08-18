@@ -18,7 +18,7 @@ function videoEmbedUrl(url: string): string | null {
 
 export default function VideoEmbed({ block }: Props) {
   const heading = block?.heading ?? "";
-  const { sectionBackgroundClass, textAlignClass, paddingClass, maxWidthClass, isDark } =
+  const { sectionBackgroundClass, textAlignClass, paddingClass, maxWidthClass } =
     sectionClasses(block);
 
   const embedSrc = videoEmbedUrl(block?.videoUrl ?? "");

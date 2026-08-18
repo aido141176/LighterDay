@@ -3,9 +3,11 @@ import { sectionClasses } from "./sectionUtils";
 
 type Props = {
   block: any;
+  isFirst?: boolean;
 };
 
-export default function HeroSplit({ block }: Props) {
+export default function HeroSplit({ block, isFirst = true }: Props) {
+  const Heading = isFirst ? "h1" : "h2";
   const { sectionBackgroundClass, textAlignClass, paddingClass, maxWidthClass, isDark } =
     sectionClasses(block);
 
@@ -13,12 +15,12 @@ export default function HeroSplit({ block }: Props) {
     <section className={`hero-split-section ${paddingClass} ${sectionBackgroundClass} ${textAlignClass}`}>
       <div className={`mx-auto grid w-full items-center gap-10 px-4 md:grid-cols-2 ${maxWidthClass}`}>
         <div>
-          <h1
+          <Heading
             className="text-4xl font-extrabold tracking-tight md:text-5xl"
             data-tina-field={tinaField(block, "headline")}
           >
             {block.headline}
-          </h1>
+          </Heading>
 
           <p
             className={`mt-6 max-w-2xl text-lg leading-8 ${
@@ -44,7 +46,7 @@ export default function HeroSplit({ block }: Props) {
           <div className="hero-split-media">
             <img
               src={block.image}
-              alt=""
+              alt={block.imageAlt || block.headline || "Hero image"}
               className="h-80 w-full rounded-xl object-cover md:h-96"
               data-tina-field={tinaField(block, "image")}
             />

@@ -29,7 +29,7 @@ loader: async () => {
     title: z.string(),
     description: z.string(),
     pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
+    updatedDate: z.coerce.date().nullish(),
     heroImage: z.string().nullish(),
   }),
 });

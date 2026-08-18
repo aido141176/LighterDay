@@ -35,7 +35,7 @@ export default function Team({ block }: Props) {
               {member?.avatarImage && (
                 <img
                   src={member.avatarImage}
-                  alt={member.name || ""}
+                  alt={member.avatarAlt || member.name || ""}
                   className="h-24 w-24 rounded-full object-cover"
                   data-tina-field={tinaField(member, "avatarImage")}
                 />

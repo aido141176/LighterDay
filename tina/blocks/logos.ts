@@ -22,5 +22,11 @@ export const logosBlock: Template = {
       description: "Upload client or partner logos to display in a row.",
       list: true,
     },
+    {
+      type: "string",
+      name: "altText",
+      label: "Alt Text (for all logos)",
+      description: "Descriptive text applied to every logo, read by screen readers and search engines.",
+    },
   ],
 };

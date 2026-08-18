@@ -8,7 +8,8 @@ import tailwindcss from "@tailwindcss/vite";
 import path from 'path';
 // https://astro.build/config
 export default defineConfig({
-	site: process.env.SITE_URL || `https://${process.env.VERCEL_URL}`,
+	// Production: set SITE_URL. Fallbacks: Vercel deployment URL, then localhost for dev builds.
+	site: process.env.SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:4321"),
 	integrations: [mdx(), sitemap(), react(), tinaDirective()],
 	vite: {
 		   resolve: {

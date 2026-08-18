@@ -18,6 +18,8 @@ This document outlines the current technical stack, data flow, and integration p
 > - Tina GraphQL playground: `http://localhost:4001/graphql`
 > - Site: `http://localhost:4321/`
 > - CMS admin: `http://localhost:4321/admin/index.html` (NOT `/admin/` — the catch-all route intercepts it)
+>
+> **Type checking:** `npm run check` (astro check) is available and must pass before finishing any task.
 
 ---
 
@@ -124,6 +126,7 @@ Do NOT inline templates in `page.ts` and do NOT write `.astro` renderers for blo
   - **`isTitle: true`** on the document-level title field (e.g. page `title`, blog `title`) — makes it the row label in the CMS list and the basis for new-document filenames.
   - **`ui.itemProps`** on every object list (members, quotes, plans, ...) — gives each item a readable sidebar label like `Member: John Smith` instead of `Item 1`. Block templates in the page builder already show their template name (Hero, Team, ...) by default; template-level `ui.itemProps` can customize that further if needed.
   - **`label` + `description`** on EVERY field — the label is the input name, the description is helper text under it explaining what to enter (e.g. `Price text, e.g. $29/mo.`). A blank input gives no context; a good description removes all guesswork for non-technical customers and AI agents.
+  - **Alt text:** every image-bearing block MUST also expose an alt-text field (`heroImageAlt`, `imageAlt`, `avatarAlt`, `altText`, ...) and the component must render `alt={field || fallback}`. Never render `alt=""` on meaningful images.
 - Components consume a single `block` prop; data not in the page query (e.g. blog posts) is threaded from `getStaticPaths` → `PageRenderer` → `Page` → the section component (see the Blog section).
 - Components are typed loosely (`any`) throughout this repo; match that rather than introducing strict types.
 - Style with Tailwind utility classes; site-specific overrides live in custom CSS files imported by components (e.g. `src/styles/CardGridSection.css`) or the `my*` utility classes.
@@ -204,4 +207,5 @@ The escape hatch for any design the other sections cannot express — raw HTML i
 - Blog post URLs are `/blog/{filename}/` (handled by the catch-all `[...slug].astro` routes, not the CMS).
 - **`ui.router` enables inline editing (visual mode).** With a router on any collection, the admin opens straight into the `#/~/<path>` visual-editing view: the live site in an iframe with the form sidebar (hover any `data-tina-field` element to see its outline; click it to open that block's form). The collection list/forms are still reachable via the hamburger menu → collection → document.
 - **If the sidebar shows "TinaCMS form fields will appear here" and a modal with "Enter Edit Mode", the CMS is not authenticated.** Click **"Enter Edit Mode"** — it sets `localStorage["tina.local.isLogedIn"]` (local-mode auth) and the forms load. Without that flag the CMS never enables and forms stay empty everywhere.
-- `src/pages/index.astro` and `about.astro` are standalone pages that do NOT use the page builder; `[...slug].astro` handles `src/content/page/*.mdx`.
+- `src/pages/index.astro` and `about.astro` statically map the `home.mdx`/`about.mdx` documents; `src/pages/[...slug].astro` (catch-all, `getStaticPaths` from `pageConnection()`) serves every OTHER document in `src/content/page/*.mdx` at `/{filename}/`, e.g. a new `services.mdx` → `/services/`. Unknown URLs fall through to `404.astro`.
+- `src/pages/rss.xml.js` and `src/pages/robots.txt.ts` are build-time endpoints; `robots.txt` advertises `Sitemap: {SITE_URL}/sitemap-index.xml` (falls back to Vercel URL, then localhost).

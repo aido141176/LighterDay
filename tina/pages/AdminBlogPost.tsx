@@ -1,4 +1,3 @@
-import React from 'react';
 import { tinaField, useTina } from "tinacms/dist/react";
 import type { BlogQuery, BlogQueryVariables } from '../__generated__/types';
 import { TinaMarkdown } from 'tinacms/dist/rich-text'
@@ -24,7 +23,7 @@ export default function AdminBlogPost(props: Props) {
 	return (
 		<article>
 			<div data-tina-field={tinaField(blog, "heroImage")} className="hero-image">
-				{blog.heroImage && <img width={1020} height={510} src={blog.heroImage} alt="" />}
+				{blog.heroImage && <img width={1020} height={510} src={blog.heroImage} alt={blog.heroImageAlt || blog.title || ""} />}
 			</div>
 			<div className="prose">
 				<div className="title">

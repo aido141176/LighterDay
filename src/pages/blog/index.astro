@@ -1,34 +1,51 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import FormattedDate from '../../components/FormattedDate.astro';
-import config from '../../content/config/config.json';
+import { client } from '../../../tina/__generated__/client';
+
+const configResponse = await client.queries.config({ relativePath: 'config.json' });
+const siteSettings = configResponse.data.config;
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
 
-<BaseLayout title={config.seo.title} description={config.seo.description} image={config.seo.image}>
-	<ul class="mx-auto flex max-w-6xl flex-wrap gap-8 px-4 py-12">
-		{
-			posts.map((post, index) => (
-				<li class={index === 0 ? 'w-full text-center' : 'w-full md:w-[calc(50%-1rem)]'}>
-					<a href={`/blog/${post.id}/`} class="block transition duration-200 hover:opacity-80">
-						<img
-							width={720}
-							height={360}
-							src={post.data.heroImage}
-							alt=""
-							class="mb-2 rounded-xl"
-						/>
-						<h4 class="text-2xl font-bold leading-none text-slate-900">{post.data.title}</h4>
-						<p class="text-slate-500">
-							<FormattedDate date={post.data.pubDate} />
-						</p>
-					</a>
-				</li>
-			))
-		}
-	</ul>
+<BaseLayout
+	title={siteSettings.seo?.title || "Blog"}
+	description={siteSettings.seo?.description || "Blog posts"}
+	image={siteSettings.seo?.image}
+>
+	<div class="mx-auto max-w-6xl px-4 py-12">
+		<h1 class="text-4xl font-extrabold tracking-tight">Blog</h1>
+		<ul class="mt-10 flex flex-wrap gap-8">
+			{
+				posts.map((post, index) => (
+					<li class={index === 0 ? 'w-full text-center' : 'w-full md:w-[calc(50%-1rem)]'}>
+						<a href={`/blog/${post.id}/`} class="block transition duration-200 hover:opacity-80">
+							{
+								post.data.heroImage ? (
+									<Image
+										src={post.data.heroImage}
+										width={720}
+										height={360}
+										alt={post.data.title}
+										class="mb-2 w-full rounded-xl"
+									/>
+								) : (
+									<div class="mb-2 h-45 w-full rounded-xl bg-slate-200" />
+								)
+							}
+							<h2 class="text-2xl font-bold leading-none text-slate-900">{post.data.title}</h2>
+							<p class="text-slate-500">
+								<FormattedDate date={post.data.pubDate} />
+							</p>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
 </BaseLayout>

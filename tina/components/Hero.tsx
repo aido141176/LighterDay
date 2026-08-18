@@ -3,9 +3,11 @@ import { sectionClasses } from "./sectionUtils";
 
 type Props = {
   block: any;
+  isFirst?: boolean;
 };
 
-export default function Hero({ block }: Props) {
+export default function Hero({ block, isFirst = true }: Props) {
+  const Heading = isFirst ? "h1" : "h2";
   const mediaType = block?.mediaType ?? "image";
   const textAlign = block?.textAlign ?? "center";
   const overlayOpacity = block?.overlayOpacity ?? "40";
@@ -64,6 +66,8 @@ export default function Hero({ block }: Props) {
           muted
           loop
           playsInline
+          preload="metadata"
+          poster={block?.heroImage || undefined}
         >
           <source src={videoSrc} />
         </video>
@@ -81,12 +85,12 @@ export default function Hero({ block }: Props) {
       <div
         className={`relative z-10 flex w-full flex-col px-6 ${paddingClass} text-white ${contentAlignment} ${maxWidthClass}`}
       >
-        <h1
+        <Heading
           className="max-w-4xl text-4xl font-extrabold tracking-tight md:text-6xl"
           data-tina-field={tinaField(block, "headline")}
         >
           {block.headline}
-        </h1>
+        </Heading>
 
         <p
           className="mt-6 max-w-2xl text-lg leading-8 text-white/90 md:text-xl"

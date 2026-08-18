@@ -45,6 +45,12 @@ export const teamBlock: Template = {
           label: "Avatar Image",
           description: "Portrait or avatar photo of the team member.",
         },
+        {
+          type: "string",
+          name: "avatarAlt",
+          label: "Avatar Alt Text",
+          description: "Descriptive text for the avatar, read by screen readers and search engines.",
+        },
       ],
     },
   ],

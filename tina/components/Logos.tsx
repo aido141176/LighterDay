@@ -28,7 +28,7 @@ export default function Logos({ block }: Props) {
             <div key={idx} className="logos-item">
               <img
                 src={logo}
-                alt={`Client logo ${idx + 1}`}
+                alt={block.altText ? `${block.altText} ${idx + 1}` : `Client logo ${idx + 1}`}
                 className={`h-12 w-auto object-contain opacity-70 transition hover:opacity-100 ${
                   isDark ? "" : "grayscale"
                 }`}

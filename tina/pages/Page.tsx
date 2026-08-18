@@ -29,7 +29,6 @@ type Props = {
 };
 
 export default function Page({ page, posts = [] }: Props) {
-  const seoTitle = page?.seoTitle;
   const blocks = page?.blocks ?? [];
 
   return (
@@ -40,7 +39,7 @@ export default function Page({ page, posts = [] }: Props) {
             case "PageBlocksHero":
               return (
                 <div key={index} data-tina-field={tinaField(page, "blocks")}>
-                  <Hero block={block} />
+                  <Hero block={block} isFirst={index === 0} />
                 </div>
               );
 
@@ -187,14 +186,14 @@ export default function Page({ page, posts = [] }: Props) {
               case "PageBlocksHeroBasic":
                 return (
                   <div key={index} data-tina-field={tinaField(page, "blocks")}>
-                    <HeroBasic block={block} />
+                    <HeroBasic block={block} isFirst={index === 0} />
                   </div>
                 );
 
               case "PageBlocksHeroSplit":
                 return (
                   <div key={index} data-tina-field={tinaField(page, "blocks")}>
-                    <HeroSplit block={block} />
+                    <HeroSplit block={block} isFirst={index === 0} />
                   </div>
                 );
 

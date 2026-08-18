@@ -1,5 +1,5 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
+import { getCollection } from "astro:content";
 import BlogPost from "../../layouts/BlogPost.astro"
 import client from "../../../tina/__generated__/client";
 import AdminBlogPost from "../../../tina/pages/AdminBlogPost";
@@ -27,6 +27,8 @@ const tinaProps = await getTinaProps();
 	title={post.data.title}
 	description={post.data.description}
 	image={post.data.heroImage}
+	pubDate={post.data.pubDate.toISOString()}
+	updatedDate={post.data.updatedDate?.toISOString()}
 >
 	<AdminBlogPost {...tinaProps} client:tina />
 </BlogPost>

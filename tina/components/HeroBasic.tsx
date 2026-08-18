@@ -3,21 +3,23 @@ import { sectionClasses } from "./sectionUtils";
 
 type Props = {
   block: any;
+  isFirst?: boolean;
 };
 
-export default function HeroBasic({ block }: Props) {
+export default function HeroBasic({ block, isFirst = true }: Props) {
+  const Heading = isFirst ? "h1" : "h2";
   const { sectionBackgroundClass, textAlignClass, paddingClass, maxWidthClass, isDark } =
     sectionClasses(block);
 
   return (
     <section className={`hero-basic-section ${paddingClass} ${sectionBackgroundClass} ${textAlignClass}`}>
       <div className={`mx-auto w-full px-4 ${maxWidthClass}`}>
-        <h1
+        <Heading
           className="text-4xl font-extrabold tracking-tight md:text-6xl"
           data-tina-field={tinaField(block, "headline")}
         >
           {block.headline}
-        </h1>
+        </Heading>
 
         <p
           className={`mx-auto mt-6 max-w-2xl text-lg leading-8 md:text-xl ${

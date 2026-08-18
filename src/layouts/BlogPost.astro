@@ -3,18 +3,38 @@ import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
   title: string;
-  description?: string;
-  image?: string;
+  description?: string | null;
+  image?: string | null;
+  pubDate?: string;
+  updatedDate?: string;
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, image, pubDate, updatedDate } = Astro.props;
+
+const SITE = Astro.site?.origin || "http://localhost:4321";
+const jsonLd = [
+  {
+    "@type": "Article",
+    headline: title,
+    ...(description ? { description } : {}),
+    ...(image ? { image: new URL(image, SITE).toString() } : {}),
+    ...(pubDate ? { datePublished: pubDate } : {}),
+    ...(updatedDate ? { dateModified: updatedDate } : {}),
+    mainEntityOfPage: new URL(Astro.url.pathname, SITE).toString(),
+  },
+];
 ---
 
-<BaseLayout title={title} description={description} image={image}>
+<BaseLayout title={title} description={description} image={image} isBlog jsonLd={jsonLd}>
   <slot />
 </BaseLayout>
 
 <style is:global>
+  :root {
+    --gray: 96, 115, 159;
+    --gray-dark: 34, 41, 57;
+    --box-shadow: 0 2px 6px rgb(96 115 159 / 25%), 0 8px 24px rgb(96 115 159 / 33%), 0 16px 32px rgb(96 115 159 / 33%);
+  }
   .hero-image {
     width: 100%;
   }
@@ -30,6 +50,9 @@ const { title, description, image } = Astro.props;
     margin: auto;
     padding: 1em;
     color: rgb(var(--gray-dark));
+  }
+  .prose p {
+    margin-bottom: 2em;
   }
   .title {
     margin-bottom: 1em;

@@ -149,6 +149,12 @@ export const cardGridBlock: Template = {
         },
         {
           type: "string",
+          name: "imageAlt",
+          label: "Card image alt text",
+          description: "Descriptive text for the image, read by screen readers and search engines.",
+        },
+        {
+          type: "string",
           name: "title",
           label: "Card title",
           description: "Card heading.",

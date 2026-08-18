@@ -22,5 +22,11 @@ export const galleryBlock: Template = {
       description: "Upload images to display in the gallery.",
       list: true,
     },
+    {
+      type: "string",
+      name: "altText",
+      label: "Alt Text (for all images)",
+      description: "Descriptive text applied to every gallery image, read by screen readers and search engines.",
+    },
   ],
 };

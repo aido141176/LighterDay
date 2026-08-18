@@ -38,5 +38,11 @@ export const heroSplitBlock: Template = {
       label: "Image",
       description: "Image displayed on the right half of the hero.",
     },
+    {
+      type: "string",
+      name: "imageAlt",
+      label: "Image Alt Text",
+      description: "Descriptive text for the image, read by screen readers and search engines.",
+    },
   ],
 };

@@ -44,6 +44,12 @@ export const BlogCollection: Collection = {
       description: "Main image shown on the blog listing and at the top of the post.",
     },
     {
+      name: "heroImageAlt",
+      label: "Hero Image Alt Text",
+      type: "string",
+      description: "Descriptive text for the hero image, read by screen readers and search engines.",
+    },
+    {
       type: "rich-text",
       name: "body",
       label: "Body",

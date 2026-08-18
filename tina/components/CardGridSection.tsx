@@ -106,7 +106,7 @@ export default function CardGridSection({ block }: Props) {
                   <figure className={`${isFullImage ? "" : "p-6 pt-6"} w-full`}>
                     <img
                       src={card.image}
-                      alt={card.title || ""}
+                      alt={card.imageAlt || card.title || ""}
                       className={`${imageSizeClass} rounded ${isFullImage ? "" : ""}`}
                       data-tina-field={tinaField(card, "image")}
                     />
