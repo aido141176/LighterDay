@@ -1,8 +1,16 @@
 ---
-// src/pages/users/index.astro
-// Clean server-side frontmatter block with no external dependencies
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import client from '../../../tina/__generated__/client';
+import PageRenderer from "../../../tina/pages/PageRenderer.tsx";
 
-//import '../../style/global.css';
+const data = await client.queries.page({ relativePath: "about.mdx" });
+const page = data.data.page;
+const postsResponse = await client.queries.blogConnection();
+const posts = (postsResponse.data.blogConnection.edges || [])
+  .map((p) => p?.node)
+  .filter(Boolean);
 ---
 
-<h1>hello</h1>
+<BaseLayout title={page?.seo?.title} description={page?.seo?.description} image={page?.seo?.image}>
+	<PageRenderer {...data} posts={posts} client:tina />
+</BaseLayout>
