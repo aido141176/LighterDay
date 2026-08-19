@@ -113,7 +113,7 @@ const schemaGraph = [
   <script is:inline>
     // Strict Route Guard: Eject logged-out users instantly before layout renders
     if (!localStorage.getItem('wp_session_token')) {
-     // window.location.href = '/users';
+      window.location.href = '/users';
     }
   </script>
   </head>

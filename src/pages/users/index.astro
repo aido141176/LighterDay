@@ -32,7 +32,7 @@ const siteName = siteSettings.seo?.title || "LighterDay";
     const token = localStorage.getItem('wp_session_token');
     if (token) {
       // Instantly eject logged-out users before the HTML body paints to the screen
-      window.location.href = 'https://lighter-day.vercel.app/users/dashboard';
+      window.location.href = '/users/dashboard';
     }
   </script>
 </head>
