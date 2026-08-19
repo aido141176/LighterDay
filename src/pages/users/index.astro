@@ -2,82 +2,7 @@
 // src/pages/users/index.astro
 // Clean server-side frontmatter block with no external dependencies
 
-import "../../styles/global.css";
-import NewNav from "../../components/navigation/NewNav.astro";
-import Footer from "../../components/ui/Footer.astro";
-import { client } from '../../../tina/__generated__/client';
-
-interface Props {
-  title?: string | null;
-  description?: string | null;
-  image?: string | null;
-  /** Set true on routes that have no page document (e.g. blog posts) to skip the page lookup. */
-  isBlog?: boolean;
-  /** Extra JSON-LD nodes merged into the page's @graph. */
-  jsonLd?: object[];
-}
-
-const { title: titleProp, description: descriptionProp, image: imageProp, isBlog = false, jsonLd = [] } = Astro.props;
-
-// 1. Fetch Global Config (Nav, Social, Global SEO)
-const response = await client.queries.config({ relativePath: 'config.json' });
-const siteSettings = response.data.config;
-const navItems = siteSettings.nav;
-const socialLinks = siteSettings.contactLinks;
-const navStyles = siteSettings.navigationSettings;
-
-// 2. Fetch Page Data based on URL (best-effort; blog routes have no page document)
-let pageContent: any = null;
-if (!isBlog) {
-  const { slug } = Astro.params;
-  const path = slug ? `${slug}.mdx` : 'home.mdx';
-  try {
-    const pageresponse = await client.queries.page({ relativePath: path });
-    pageContent = pageresponse.data.page;
-  } catch (e) {
-    pageContent = null;
-  }
-}
-
-// 3. SEO Logic: explicit props win, then page frontmatter, then site-wide config
-const siteName = siteSettings.seo?.title || "LighterDay";
-const metaTitle = (titleProp || pageContent?.seo?.title || siteSettings.seo?.title || siteName) ?? siteName;
-const metaDescription = (descriptionProp || pageContent?.seo?.description || siteSettings.seo?.description || "") ?? "";
-const SITE = Astro.site?.origin || "http://localhost:4321";
-const canonicalURL = new URL(Astro.url.pathname, SITE);
-const shareImage = (imageProp || pageContent?.seo?.image || siteSettings.seo?.image || "/hero-cover-image-scaled.webp") ?? "/hero-cover-image-scaled.webp";
-const shareImageURL = new URL(shareImage, SITE).toString();
-
-// 4. Length limits: keep titles 50-60 chars and descriptions 120-160 chars
-const clampTitle = (value: string, max = 60) => {
-  if (value.length <= max) return value;
-  return value.slice(0, max - 1).trimEnd() + "…";
-};
-const clampDescription = (value: string, min = 120, max = 160) => {
-  if (value.length >= min && value.length <= max) return value;
-  if (value.length > max) return value.slice(0, max - 1).trimEnd() + "…";
-  return value;
-};
-const resolvedTitle = clampTitle(metaTitle || siteName);
-const resolvedDescription = clampDescription(metaDescription || "LighterDay — professional web design and digital services.");
-
-// 5. Structured data (JSON-LD): Organization + WebSite, plus any page-specific nodes
-const schemaGraph = [
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: siteName,
-    url: SITE,
-    ...(shareImage ? { logo: shareImageURL } : {}),
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: siteName,
-    url: SITE,
-  },
-  ...jsonLd,
-];
+import '../../../../style/global.css';
 ---
 
 
@@ -93,17 +18,10 @@ const schemaGraph = [
       // Instantly eject logged-out users before the HTML body paints to the screen
       window.location.href = 'https://lighter-day.vercel.app/users/dashboard';
     }
-
-    
   </script>
 </head>
 <body class="bg-slate-900 min-h-screen text-slate-100 flex flex-col items-center justify-center p-4">
-   <NewNav
-      navData={navItems}
-      socialData={socialLinks}
-      styles={navStyles}
-      siteName={siteName}
-    />
+
   <div class="w-full max-w-md bg-slate-800 rounded-2xl border border-slate-700 shadow-xl p-6">
     <div class="mb-6">
       <h2 class="text-2xl font-bold text-white">Flatmates Dashboard</h2>
