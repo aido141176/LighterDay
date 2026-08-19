@@ -81,33 +81,17 @@ const schemaGraph = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, unfollow" />
 
-    <title>{resolvedTitle}</title>
-    <meta name="description" content={resolvedDescription} />
-    <link rel="canonical" href={canonicalURL} />
+    <title>Dashboard</title>
+    <meta name="description" content="This is my user dashboard" />
+  
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={siteName} />
-    <meta property="og:url" content={canonicalURL} />
-    <meta property="og:title" content={resolvedTitle} />
-    <meta property="og:description" content={resolvedDescription} />
-    <meta property="og:image" content={shareImageURL} />
-    <meta property="og:image:alt" content={resolvedTitle} />
+  
 
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={resolvedTitle} />
-    <meta name="twitter:description" content={resolvedDescription} />
-    <meta name="twitter:image" content={shareImageURL} />
-
-    <!-- Structured Data -->
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaGraph)} />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#ffffff" />
+
 
      <!-- 1. STRICT ROUTE GUARD: Runs instantly in the browser header to prevent flash of content -->
   <script is:inline>
