@@ -138,6 +138,9 @@ dist
 # Astro
 .astro
 
+# Vercel
+.vercel
+
 # Don't allow lock files to be committed (This is for templates only)
 
 # Package Manager Lock Files
