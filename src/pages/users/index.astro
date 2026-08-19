@@ -3,6 +3,22 @@
 // Clean server-side frontmatter block with no external dependencies
 
 import '../../styles/global.css';
+import NewNav from "../../components/navigation/NewNav.astro";
+import Footer from "../../components/ui/Footer.astro";
+import { client } from '../../../tina/__generated__/client';
+
+
+
+
+
+// 1. Fetch Global Config (Nav, Social, Global SEO)
+const response = await client.queries.config({ relativePath: 'config.json' });
+const siteSettings = response.data.config;
+const navItems = siteSettings.nav;
+const socialLinks = siteSettings.contactLinks;
+const navStyles = siteSettings.navigationSettings;
+
+const siteName = siteSettings.seo?.title || "LighterDay";
 ---
 
 
@@ -21,11 +37,18 @@ import '../../styles/global.css';
   </script>
 </head>
 <body class="bg-slate-900 min-h-screen text-slate-100 flex flex-col items-center justify-center p-4">
+   <NewNav
+      navData={navItems}
+      socialData={socialLinks}
+      styles={navStyles}
+      siteName={siteName}
+    />
 
   <div class="w-full max-w-md bg-slate-800 rounded-2xl border border-slate-700 shadow-xl p-6">
+    <h2>heheheh</h2>
     <div class="mb-6">
-      <h2 class="text-2xl font-bold text-white">Flatmates Dashboard</h2>
-      <p class="text-slate-400 text-sm mt-1">Authentication hhhhcheck panel via headless WordPress.</p>
+      <h2 class="text-2xl font-bold text-white">Log into Dashboard</h2>
+      <p class="text-slate-400 text-sm mt-1">Authentication with JWT headless WordPress.</p>
     </div>
 
     <!-- 1. Authenticated Status View Panel (Hidden by default) -->

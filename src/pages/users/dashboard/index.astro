@@ -1,27 +1,10 @@
 ---
 // src/pages/users/dashboard.astro
+
+import DashboardLayout from "../../../layouts/DashboardLayout.astro";
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>User Flatmates Dashboard</title>
-  <script src="https://tailwindcss.com"></script>
-
-  <!-- 1. STRICT ROUTE GUARD: Runs instantly in the browser header to prevent flash of content -->
-  <script is:inline>
-    // Strict Route Guard: Eject logged-out users instantly before layout renders
-    if (!localStorage.getItem('wp_session_token')) {
-      window.location.href = '/users';
-    }
-  </script>
-
-  
-</head>
-<body class="bg-slate-900 min-h-screen text-slate-100 flex flex-col items-center justify-center p-4">
-
+<DashboardLayout>
   <!-- Main Dashboard Container Card (Visually hidden by default until populated) -->
   <div id="private-content" class="invisible w-full max-w-2xl bg-slate-800 rounded-2xl border border-slate-700 shadow-xl p-6">
     
@@ -52,7 +35,8 @@
 
   </div>
 
-  <script>
+
+    <script>
     // 2. Hydrate Dashboard Metadata on Client Mount
     const privateContent = document.getElementById('private-content');
     const nameSlot = document.getElementById('user-display-name');
@@ -77,5 +61,10 @@
       });
     }
   </script>
-</body>
-</html>
+</DashboardLayout>
+
+
+
+
+
+
