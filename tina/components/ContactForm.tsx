@@ -42,19 +42,38 @@ export default function ContactForm({ block }: Props) {
           </p>
         )}
 
-        <form 
-        onSubmit={async (e) =>
-         {e.preventDefault();setStatus("submitting");const target = e.currentTarget;
-         const formData = {
-         input_1: (target.elements.namedItem("name") as HTMLInputElement).value,
-         input_2: (target.elements.namedItem("email") as HTMLInputElement).value,
-         input_3: (target.elements.namedItem("message") as HTMLTextAreaElement).value};
-         try {
-          const res = await fetch("/api/contact", {method: "POST",
-         headers: { "Content-Type": "application/json" },
-         body: JSON.stringify(formData)});if (res.ok) {setStatus("success");target.reset();} 
-         else {setStatus("error");}} catch {setStatus("error");}}} 
-         className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <form 
+      onSubmit={async (e) => {
+        e.preventDefault();
+        setStatus("submitting");
+        const target = e.currentTarget;
+        
+        const formPayload = {
+          input_1: (target.elements.namedItem("name") as HTMLInputElement).value,
+          input_2: (target.elements.namedItem("email") as HTMLInputElement).value,
+          input_3: (target.elements.namedItem("message") as HTMLTextAreaElement).value
+        };
+
+        try {
+          const res = await fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formPayload)
+          });
+          
+          if (res.ok) {
+            setStatus("success");
+            target.reset();
+          } else {
+            setStatus("error");
+          }
+        } catch {
+          setStatus("error");
+        }
+      }} 
+      className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+    >
+
 
           <label className={`block text-sm font-medium ${isDark ? "text-slate-100" : "text-slate-900"}`}>
             Name
