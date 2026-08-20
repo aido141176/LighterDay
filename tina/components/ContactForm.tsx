@@ -55,7 +55,7 @@ export default function ContactForm({ block }: Props) {
          body: JSON.stringify(formData)});if (res.ok) {setStatus("success");target.reset();} 
          else {setStatus("error");}} catch {setStatus("error");}}} 
          className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          
+
           <label className={`block text-sm font-medium ${isDark ? "text-slate-100" : "text-slate-900"}`}>
             Name
             <input type="text" name="name" required className={inputClass} />
@@ -69,11 +69,24 @@ export default function ContactForm({ block }: Props) {
             <textarea name="message" rows={5} required className={inputClass}></textarea>
           </label>
           <button
+          disabled={status === "submitting"}
+          
             type="submit"
             className="mt-6 w-full rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white shadow hover:bg-blue-700"
+            
           >
+            {status === "submitting" ? "Sending..." : "Send"}
             Send
           </button>
+
+          {status === "success" && (
+            <p className="mt-4 text-sm font-medium text-green-600 text-center">Form submitted successfully!</p>
+          )}
+          {status === "error" && (
+            <p className="mt-4 text-sm font-medium text-red-600 text-center">Something went wrong. Please try again.</p>
+          )}
+
+
         </form>
 
         {recipientEmail && (
