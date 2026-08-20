@@ -1,9 +1,13 @@
 import { tinaField } from "tinacms/dist/react";
 import { sectionClasses } from "./sectionUtils";
+import { useState } from "react";
+
 
 type Props = {
   block: any;
 };
+
+
 
 export default function ContactForm({ block }: Props) {
   const title = block?.title ?? "";
@@ -11,8 +15,10 @@ export default function ContactForm({ block }: Props) {
   const recipientEmail = block?.recipientEmail ?? "";
   const { sectionBackgroundClass, textAlignClass, paddingClass, maxWidthClass, isDark } =
     sectionClasses(block);
-
-  const inputClass =
+ 
+    const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  
+    const inputClass =
     "mt-1 w-full rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500";
 
   return (
@@ -36,7 +42,20 @@ export default function ContactForm({ block }: Props) {
           </p>
         )}
 
-        <form className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <form 
+        onSubmit={async (e) =>
+         {e.preventDefault();setStatus("submitting");const target = e.currentTarget;
+         const formData = {
+         input_1: (target.elements.namedItem("name") as HTMLInputElement).value,
+         input_2: (target.elements.namedItem("email") as HTMLInputElement).value,
+         input_3: (target.elements.namedItem("message") as HTMLTextAreaElement).value};
+         try {
+          const res = await fetch("/api/contact", {method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify(formData)});if (res.ok) {setStatus("success");target.reset();} 
+         else {setStatus("error");}} catch {setStatus("error");}}} 
+         className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          
           <label className={`block text-sm font-medium ${isDark ? "text-slate-100" : "text-slate-900"}`}>
             Name
             <input type="text" name="name" required className={inputClass} />
