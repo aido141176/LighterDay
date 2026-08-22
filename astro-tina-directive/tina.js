@@ -1,14 +1,11 @@
 /**
- * Hydrate on first click on the window
+ * Always hydrate: immediately in the Tina admin iframe (visual editing),
+ * and for normal visitors too — required for interactive blocks like the
+ * contact form (onSubmit/state only exist after React mounts).
  * @type {import('astro').ClientDirective}
  */
 export default async (load, options, el) => {
   try {
-    const isInIframe = window.self !== window.top;
-    if (!isInIframe) {
-      return;
-    }
-    
     const hydrate = await load();
     await hydrate();
   } catch (error) {
