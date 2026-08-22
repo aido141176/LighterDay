@@ -1,5 +1,7 @@
 import type { APIRoute } from 'astro';
 
+export const prerender = false;
+
 export const POST: APIRoute = async ({ request }) => {
   try {
     // 1. Parse the incoming form data sent by your ContactForm component
@@ -23,7 +25,7 @@ export const POST: APIRoute = async ({ request }) => {
     // 4. Point this to your Gravity Forms public submission endpoint
     // Double-check your form ID number inside WordPress! (Assuming it's Form ID 1 here)
     const formId = 1; 
-    const gfUrl = `https://://api.amcd.com.au/wp-json/gf/v2/forms/${formId}/submissions`;
+    const gfUrl = `https://api.amcd.com.au/wp-json/gf/v2/forms/${formId}/submissions`;
 
     // 5. Send the payload safely to your WordPress backend server
     const response = await fetch(gfUrl, {

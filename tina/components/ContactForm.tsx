@@ -96,7 +96,6 @@ export default function ContactForm({ block }: Props) {
             
           >
             {status === "submitting" ? "Sending..." : "Send"}
-            Send
           </button>
 
           {status === "success" && (
