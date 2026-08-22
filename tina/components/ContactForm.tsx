@@ -17,6 +17,7 @@ export default function ContactForm({ block }: Props) {
     sectionClasses(block);
  
     const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+    const [errorDetail, setErrorDetail] = useState("");
   
     const inputClass =
     "mt-1 w-full rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500";
@@ -60,14 +61,21 @@ export default function ContactForm({ block }: Props) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formPayload)
               });
-              
+
+              const data = await res.json().catch(() => null);
+
               if (res.ok) {
                 setStatus("success");
                 target.reset();
               } else {
+                const msgs = data?.validation_messages
+                  ? Object.values(data.validation_messages).join(" ")
+                  : "";
+                setErrorDetail(typeof msgs === "string" ? msgs : "");
                 setStatus("error");
               }
             } catch {
+              setErrorDetail("");
               setStatus("error");
             }
           }} 
@@ -102,7 +110,9 @@ export default function ContactForm({ block }: Props) {
             <p className="mt-4 text-sm font-medium text-green-600 text-center">Form submitted successfully!</p>
           )}
           {status === "error" && (
-            <p className="mt-4 text-sm font-medium text-red-600 text-center">Something went wrong. Please try again.</p>
+            <p className="mt-4 text-sm font-medium text-red-600 text-center">
+              {errorDetail || "Something went wrong. Please try again."}
+            </p>
           )}
 
 
