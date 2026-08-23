@@ -1,39 +1,10 @@
-
 ---
-const FORM_ID = 2; // Replace with your Form ID
-const DATE_FIELD_ID = "3"; // Replace with your Date Field ID
-const TIME_FIELD_ID = "4"; // Replace with your Time Field ID
+// src/components/BookingForm.astro
+// Booking form backed by Gravity Forms form #2 (name=1, date=3, time select=4).
+// Availability is loaded at RUNTIME from /api/booked-slots — never during build.
+const FORM_ID = 2; // informational only; API routes hold the real config
 
-const GF_ROOT_URL = "https://api.amcd.com.au";
-const CK = process.env.GF_CONSUMER_KEY ?? import.meta.env.GF_CONSUMER_KEY;
-const CS = process.env.GF_CONSUMER_SECRET ?? import.meta.env.GF_CONSUMER_SECRET;
-
-
-// Fetch entries from the Gravity Forms API
-const response = await fetch(`${GF_ROOT_URL}/forms/${FORM_ID}/entries?paging[page_size]=1000`, {
-  headers: {
-    'Authorization': 'Basic ' + Buffer.from(`${CK}:${CS}`).toString('base64')
-  }
-});
-
-const data = await response.json();
-const entries = data.entries || [];
-
-// Create a map of booked dates and times
-// Format: { "2026-08-25": ["09:00", "11:00"] }
-const bookedSlots = entries.reduce((acc: any, entry: any) => {
-  const date = entry[DATE_FIELD_ID]; // e.g., "2026-08-25"
-  const time = entry[TIME_FIELD_ID]; // e.g., "09:00"
-  
-  if (date && time) {
-    if (!acc[date]) acc[date] = [];
-    acc[date].push(time);
-  }
-  return acc;
-}, {});
-
-// Define all your base hour blocks
-const allTimeBlocks = [
+const TIME_BLOCKS = [
   { value: "09:00", label: "9:00 AM" },
   { value: "10:00", label: "10:00 AM" },
   { value: "11:00", label: "11:00 AM" },
@@ -42,9 +13,198 @@ const allTimeBlocks = [
   { value: "14:00", label: "2:00 PM" },
   { value: "15:00", label: "3:00 PM" },
   { value: "16:00", label: "4:00 PM" },
-    { value: "17:00", label: "5:00 PM" },
+  { value: "17:00", label: "5:00 PM" },
 ];
+
+const today = new Date().toISOString().split("T")[0];
+
+const inputClass =
+  "mt-1 w-full rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500";
+const slotBase =
+  "time-slot rounded-lg border px-3 py-2 text-sm font-medium transition-colors";
+const slotIdle =
+  "border-slate-300 bg-white text-slate-700 hover:border-blue-500 hover:text-blue-600";
+const slotSelected = "border-blue-600 bg-blue-600 text-white";
+const slotTaken = "border-slate-200 bg-slate-100 text-slate-400 line-through cursor-not-allowed opacity-60";
 ---
 
+<section id="booking" class="bg-slate-50 py-16">
+  <div class="mx-auto w-full max-w-xl px-4">
+    <h2 class="mb-4 text-3xl font-bold tracking-tight text-slate-900">
+      Book an Appointment
+    </h2>
+    <p class="mb-8 leading-7 text-slate-600">
+      Pick a date and one of the available times below.
+    </p>
 
+    <form
+      id="booking-form"
+      data-form-id={FORM_ID}
+      class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+    >
+      <label class="block text-sm font-medium text-slate-900">
+        Name
+        <input id="booking-name" type="text" required class={inputClass} autocomplete="name" />
+      </label>
 
+      <label class="mt-4 block text-sm font-medium text-slate-900">
+        Date
+        <input id="booking-date" type="date" min={today} required class={inputClass} />
+      </label>
+
+      <fieldset class="mt-4">
+        <legend class="text-sm font-medium text-slate-900">Time</legend>
+        <div id="time-slots" class="mt-2 flex flex-wrap gap-2">
+          {TIME_BLOCKS.map((t) => (
+            <button
+              type="button"
+              data-time={t.value}
+              class={`${slotBase} ${slotIdle}`}
+              disabled
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+        <input type="hidden" id="booking-time" required />
+      </fieldset>
+
+      <button
+        id="booking-submit"
+        type="submit"
+        class="mt-6 w-full rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white shadow hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+      >
+        Confirm Booking
+      </button>
+
+      <p id="booking-status" class="mt-4 hidden text-center text-sm font-medium"></p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('booking-form') as HTMLFormElement | null;
+
+  if (form) {
+    const nameInput = document.getElementById('booking-name') as HTMLInputElement | null;
+    const dateInput = document.getElementById('booking-date') as HTMLInputElement | null;
+    const timeValue = document.getElementById('booking-time') as HTMLInputElement | null;
+    const submitBtn = document.getElementById('booking-submit') as HTMLButtonElement | null;
+    const statusEl = document.getElementById('booking-status') as HTMLParagraphElement | null;
+    const slotContainer = document.getElementById('time-slots');
+
+    const slots = Array.from(
+      slotContainer?.querySelectorAll<HTMLButtonElement>('.time-slot') ?? []
+    );
+
+    const SLOT_IDLE = "border-slate-300 bg-white text-slate-700 hover:border-blue-500 hover:text-blue-600";
+    const SLOT_SELECTED = "border-blue-600 bg-blue-600 text-white";
+
+    let bookedSlots: Record<string, string[]> = {};
+    let loading = false;
+
+    const setStatus = (message: string, isError: boolean): void => {
+      if (!statusEl) return;
+      if (!message) {
+        statusEl.classList.add('hidden');
+        return;
+      }
+      statusEl.classList.remove('hidden');
+      statusEl.textContent = message;
+      statusEl.classList.toggle('text-red-600', isError);
+      statusEl.classList.toggle('text-green-600', !isError);
+    };
+
+    const refreshSlots = (): void => {
+      const date = dateInput?.value ?? '';
+      for (const btn of slots) {
+        const time = btn.dataset.time ?? '';
+        const taken = !!date && (bookedSlots[date] ?? []).includes(time);
+        const selected = timeValue?.value === time && !taken;
+
+        btn.disabled = taken || !date || loading;
+        btn.className =
+          'time-slot rounded-lg border px-3 py-2 text-sm font-medium transition-colors ' +
+          (taken
+            ? 'border-slate-200 bg-slate-100 text-slate-400 line-through cursor-not-allowed opacity-60'
+            : selected
+              ? SLOT_SELECTED
+              : SLOT_IDLE);
+
+        if (taken && selected) {
+          if (timeValue) timeValue.value = '';
+        }
+      }
+    };
+
+    // Load availability at runtime so it is always current
+    fetch('/api/booked-slots')
+      .then((res) => res.json())
+      .then((data) => {
+        bookedSlots = data?.bookedSlots ?? {};
+        refreshSlots();
+      })
+      .catch(() => refreshSlots());
+
+    dateInput?.addEventListener('change', () => {
+      if (timeValue) timeValue.value = '';
+      refreshSlots();
+    });
+
+    for (const btn of slots) {
+      btn.addEventListener('click', () => {
+        if (btn.disabled || !timeValue) return;
+        timeValue.value = btn.dataset.time ?? '';
+        refreshSlots();
+      });
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!nameInput || !dateInput || !timeValue || !submitBtn) return;
+
+      const payload = {
+        name: nameInput.value,
+        date: dateInput.value,
+        time: timeValue.value,
+      };
+
+      if (!payload.name || !payload.date || !payload.time) {
+        setStatus('Please fill in your name and pick a date and time.', true);
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Booking…';
+      setStatus('', false);
+
+      try {
+        const res = await fetch('/api/bookings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => null);
+
+        if (res.ok && data?.is_valid !== false) {
+          setStatus(`Thanks ${payload.name}! Your booking is confirmed for ${payload.date} at ${payload.time}.`, false);
+          form.reset();
+          if (timeValue) timeValue.value = '';
+          bookedSlots[payload.date] = [...(bookedSlots[payload.date] ?? []), payload.time];
+          refreshSlots();
+        } else {
+          const msgs = data?.validation_messages
+            ? Object.values(data.validation_messages).join(' ')
+            : '';
+          setStatus(msgs || 'Something went wrong. Please try again.', true);
+        }
+      } catch {
+        setStatus('Something went wrong. Please try again.', true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Confirm Booking';
+        refreshSlots();
+      }
+    });
+  }
+</script>
