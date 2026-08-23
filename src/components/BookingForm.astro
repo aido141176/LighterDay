@@ -1,0 +1,50 @@
+
+---
+const FORM_ID = 2; // Replace with your Form ID
+const DATE_FIELD_ID = "3"; // Replace with your Date Field ID
+const TIME_FIELD_ID = "4"; // Replace with your Time Field ID
+
+const GF_ROOT_URL = "https://api.amcd.com.au";
+const CK = process.env.GF_CONSUMER_KEY ?? import.meta.env.GF_CONSUMER_KEY;
+const CS = process.env.GF_CONSUMER_SECRET ?? import.meta.env.GF_CONSUMER_SECRET;
+
+
+// Fetch entries from the Gravity Forms API
+const response = await fetch(`${GF_ROOT_URL}/forms/${FORM_ID}/entries?paging[page_size]=1000`, {
+  headers: {
+    'Authorization': 'Basic ' + Buffer.from(`${CK}:${CS}`).toString('base64')
+  }
+});
+
+const data = await response.json();
+const entries = data.entries || [];
+
+// Create a map of booked dates and times
+// Format: { "2026-08-25": ["09:00", "11:00"] }
+const bookedSlots = entries.reduce((acc: any, entry: any) => {
+  const date = entry[DATE_FIELD_ID]; // e.g., "2026-08-25"
+  const time = entry[TIME_FIELD_ID]; // e.g., "09:00"
+  
+  if (date && time) {
+    if (!acc[date]) acc[date] = [];
+    acc[date].push(time);
+  }
+  return acc;
+}, {});
+
+// Define all your base hour blocks
+const allTimeBlocks = [
+  { value: "09:00", label: "9:00 AM" },
+  { value: "10:00", label: "10:00 AM" },
+  { value: "11:00", label: "11:00 AM" },
+  { value: "12:00", label: "12:00 PM" },
+  { value: "13:00", label: "1:00 PM" },
+  { value: "14:00", label: "2:00 PM" },
+  { value: "15:00", label: "3:00 PM" },
+  { value: "16:00", label: "4:00 PM" },
+    { value: "17:00", label: "5:00 PM" },
+];
+---
+
+
+

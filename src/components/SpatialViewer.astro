@@ -1,56 +1,74 @@
 ---
 // src/components/SpatialViewer.astro
-// Lightweight pseudo-3D frame animation system
-const totalFrames = 48;
+// Premium scroll-driven pseudo-3D frame animation system
+const totalFrames = 61;
 ---
 
-<div class="3d-container relative w-full h-[500px] cursor-grab active:cursor-grabbing flex items-center justify-center overflow-hidden">
-  <!-- Pre-render the initial canvas plate -->
-  <img 
-    id="spatial-render" 
-    src="/frames/hero_001.png" 
-    alt="3D Spatial Product Display" 
-    class="w-full h-full object-contain pointer-events-none select-none"
-    data-total={totalFrames}
-  />
+<!-- The outer wrapper sets how long the scroll zone lasts (e.g., h-[200vh] means 2 full screen scrolls) -->
+<div id="scroll-zone" class="relative w-full h-[200vh] bg-slate-50 rounded-xl">
+  <!-- The sticky container locks the 3D asset in place while the page scrolls by -->
+  <div class="sticky top-12 w-full h-[500px] flex items-center justify-center overflow-hidden select-none">
+    <img 
+      id="spatial-render" 
+      src="/frames/hero_001.png" 
+      alt="3D Scroll Controlled Display" 
+      class="w-full h-full object-contain pointer-events-none select-none"
+      data-total={totalFrames}
+    />
+  </div>
 </div>
 
 <script>
-  const targetImage = document.getElementById('spatial-render') as HTMLImageElement;
-  if (targetImage) {
-    const total = parseInt(targetImage.dataset.total || '48');
-    let isDragging = false;
-    let startX = 0;
-    let currentFrame = 1;
+  const targetImage = document.getElementById('spatial-render') as HTMLImageElement | null;
+  const scrollZone = document.getElementById('scroll-zone');
 
-    // Fast-loading image cache hook to prevent flicker during interaction
+  if (targetImage && scrollZone) {
+    const total = parseInt(targetImage.dataset.total || '61', 10);
+
+    // Warm browser cache sequentially for all 61 frames
     for (let i = 1; i <= total; i++) {
       const img = new Image();
       img.src = `/frames/hero_${String(i).padStart(3, '0')}.png`;
     }
 
-    const container = targetImage.parentElement;
-    if (container) {
-      container.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.clientX;
-      });
+    const frameSrc = (frame: number): string =>
+      `/frames/hero_${String(frame).padStart(3, '0')}.png`;
 
-      window.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        const deltaX = e.clientX - startX;
-        // Adjust structural sensitivity (higher divider = slower rotation)
-        const frameOffset = Math.floor(deltaX / 12); 
-        
-        let newFrame = ((currentFrame + frameOffset - 1) % total) + 1;
-        if (newFrame <= 0) newFrame = total + newFrame;
+    // High-performance scroll animation loop handler
+    const handleScrollAnimation = () => {
+      const rect = scrollZone.getBoundingClientRect();
+      const elementHeight = rect.height;
+      const viewHeight = window.innerHeight;
 
-        targetImage.src = `/frames/hero_${String(newFrame).padStart(3, '0')}.png`;
-      });
+      // Calculate the current scrolling position inside our container
+      // 0 means the top of the container just hit the screen, 1 means it scrolled past completely
+      const scrollTop = -rect.top;
+      const scrollRange = elementHeight - viewHeight;
+      
+      let progress = scrollTop / scrollRange;
+      
+      // Keep progress bounded safely between 0% and 100%
+      if (progress < 0) progress = 0;
+      if (progress > 1) progress = 1;
 
-      window.addEventListener('mouseup', () => {
-        isDragging = false;
-      });
-    }
+      // Map the 0-1 percentage to our 1-61 frame numbers
+      const targetFrame = Math.min(
+        total,
+        Math.max(1, Math.floor(progress * total) + 1)
+      );
+
+      // Only swap out image sources if the calculated frame actually shifts
+      const currentSrc = targetImage.getAttribute('src');
+      const nextSrc = frameSrc(targetFrame);
+      if (currentSrc !== nextSrc) {
+        targetImage.src = nextSrc;
+      }
+    };
+
+    // Use a passive listener so mobile scrolling stays butter-smooth
+    window.addEventListener('scroll', handleScrollAnimation, { passive: true });
+    
+    // Fire it once on boot up to set the initial frame positions correctly
+    handleScrollAnimation();
   }
 </script>

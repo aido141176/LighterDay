@@ -2,7 +2,8 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import client from '../../tina/__generated__/client';
 import PageRenderer from "../../tina/pages/PageRenderer.tsx";
-
+import SpartialViewer from "../components/SpatialViewer.astro";
+import BookingForm from "../components/BookingForm.astro";
 const data = await client.queries.page({ relativePath: "home.mdx" });
 const page = data.data.page;
 const postsResponse = await client.queries.blogConnection();
@@ -12,5 +13,10 @@ const posts = (postsResponse.data.blogConnection.edges || [])
 ---
 
 <BaseLayout title={page?.seo?.title} description={page?.seo?.description} image={page?.seo?.image}>
+ 
 	<PageRenderer {...data} posts={posts} client:tina />
+
+   <h1>HELLO</h1>
+<SpartialViewer/>
+<BookingForm/>
 </BaseLayout>
