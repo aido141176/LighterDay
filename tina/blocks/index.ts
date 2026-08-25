@@ -12,6 +12,7 @@ export { textWithImageBlock } from "./textWithImage";
 export { heroCarouselBlock } from "./heroCarousel";
 export { contactBlock } from "./contact";
 export { contactFormBlock } from "./contactForm";
+export { bookingFormBlock } from "./bookingForm";
 export { statsBlock } from "./stats";
 export { logosBlock } from "./logos";
 export { pricingBlock } from "./pricing";

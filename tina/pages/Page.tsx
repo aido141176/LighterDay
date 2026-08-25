@@ -13,6 +13,7 @@ import TextWithImage from "../components/TextWithImage";
 import HeroCarousel from "../components/HeroCarousel";
 import Contact from "../components/Contact";
 import ContactForm from "../components/ContactForm";
+import BookingFormSection from "../components/BookingFormSection";
 import Stats from "../components/Stats";
 import Logos from "../components/Logos";
 import Pricing from "../components/Pricing";
@@ -131,6 +132,13 @@ export default function Page({ page, posts = [] }: Props) {
                 return (
                   <div key={index} data-tina-field={tinaField(page, "blocks")}>
                     <ContactForm block={block} />
+                  </div>
+                );
+
+              case "PageBlocksBookingForm":
+                return (
+                  <div key={index} data-tina-field={tinaField(page, "blocks")}>
+                    <BookingFormSection block={block} />
                   </div>
                 );
 

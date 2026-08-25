@@ -13,10 +13,5 @@ const posts = (postsResponse.data.blogConnection.edges || [])
 ---
 
 <BaseLayout title={page?.seo?.title} description={page?.seo?.description} image={page?.seo?.image}>
- 
-	<PageRenderer {...data} posts={posts} client:tina />
-
-
-
-<BookingForm/>
+ 	<PageRenderer {...data} posts={posts} client:tina />
 </BaseLayout>
