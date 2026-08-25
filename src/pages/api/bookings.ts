@@ -44,7 +44,7 @@ export const POST: APIRoute = async ({ request }) => {
         'User-Agent': 'Mozilla/5.0 (compatible; LighterDaySite/1.0)',
       },
       body: JSON.stringify({
-        input_1: name,
+        input_5: name,
         input_3: date,
         input_4: time,
       }),
