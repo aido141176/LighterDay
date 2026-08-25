@@ -48,6 +48,16 @@ const slotTaken = "border-slate-200 bg-slate-100 text-slate-400 line-through cur
       </label>
 
       <label class="mt-4 block text-sm font-medium text-slate-900">
+        Email
+        <input id="booking-email" type="email" required class={inputClass} autocomplete="email" />
+      </label>
+
+      <label class="mt-4 block text-sm font-medium text-slate-900">
+        Phone Number
+        <input id="booking-phone" type="tel" required class={inputClass} autocomplete="tel" />
+      </label>
+
+      <label class="mt-4 block text-sm font-medium text-slate-900">
         Date
         <input id="booking-date" type="date" min={today} required class={inputClass} />
       </label>
@@ -87,6 +97,8 @@ const slotTaken = "border-slate-200 bg-slate-100 text-slate-400 line-through cur
 
   if (form) {
     const nameInput = document.getElementById('booking-name') as HTMLInputElement | null;
+    const emailInput = document.getElementById('booking-email') as HTMLInputElement | null;
+    const phoneInput = document.getElementById('booking-phone') as HTMLInputElement | null;
     const dateInput = document.getElementById('booking-date') as HTMLInputElement | null;
     const timeValue = document.getElementById('booking-time') as HTMLInputElement | null;
     const submitBtn = document.getElementById('booking-submit') as HTMLButtonElement | null;
@@ -161,16 +173,18 @@ const slotTaken = "border-slate-200 bg-slate-100 text-slate-400 line-through cur
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!nameInput || !dateInput || !timeValue || !submitBtn) return;
+      if (!nameInput || !emailInput || !phoneInput || !dateInput || !timeValue || !submitBtn) return;
 
       const payload = {
         name: nameInput.value,
+        email: emailInput.value,
+        phone: phoneInput.value,
         date: dateInput.value,
         time: timeValue.value,
       };
 
-      if (!payload.name || !payload.date || !payload.time) {
-        setStatus('Please fill in your name and pick a date and time.', true);
+      if (!payload.name || !payload.email || !payload.phone || !payload.date || !payload.time) {
+        setStatus('Please fill in all required fields.', true);
         return;
       }
 

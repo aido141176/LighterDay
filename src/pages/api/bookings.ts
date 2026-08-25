@@ -12,12 +12,14 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
     const name = String(body?.name ?? '').trim();
+    const email = String(body?.email ?? '').trim();
+    const phone = String(body?.phone ?? '').trim();
     const date = String(body?.date ?? '').trim();
     const time = String(body?.time ?? '').trim();
 
-    if (!name || !date || !time) {
+    if (!name || !email || !phone || !date || !time) {
       return new Response(
-        JSON.stringify({ error: 'Name, date and time are required.' }),
+        JSON.stringify({ error: 'Name, email, phone number, date and time are required.' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -44,9 +46,11 @@ export const POST: APIRoute = async ({ request }) => {
         'User-Agent': 'Mozilla/5.0 (compatible; LighterDaySite/1.0)',
       },
       body: JSON.stringify({
-        input_5: name,
+        input_1: name,
         input_3: date,
         input_4: time,
+        input_6: phone,
+        input_7: email,
       }),
     });
 
